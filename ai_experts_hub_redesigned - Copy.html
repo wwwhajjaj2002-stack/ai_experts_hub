@@ -1,0 +1,3929 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Experts Hub — مساعدون خبراء</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap"
+    rel="stylesheet" />
+  <!-- PDF.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <style>
+    :root {
+      --bg: #080808;
+      --surface: #0f0f0f;
+      --card: #141414;
+      --card2: #1a1a1a;
+      --border: #222;
+      --border-light: #2e2e2e;
+      --text: #e8e8e8;
+      --muted: #666;
+      --muted2: #888;
+      --vc: #D4AF37;
+      --vc2: #F0E0A0;
+      --vg: #AA8C2C;
+      --v-glow: rgba(212, 175, 55, .18);
+      --v-bg: rgba(212, 175, 55, .06);
+      --sc: #C47B85;
+      --sc2: #EAC8C2;
+      --sp: #8A535B;
+      --s-glow: rgba(196, 123, 133, .18);
+      --s-bg: rgba(196, 123, 133, .06);
+      --mc: #B0B8BC;
+      --mc2: #DDE2E4;
+      --mg: #7A8085;
+      --m-glow: rgba(176, 184, 188, .18);
+      --m-bg: rgba(176, 184, 188, .06);
+      --cc: #9b5DE5;
+      --cc2: #c599f3;
+      --cg: #7234b3;
+      --c-glow: rgba(155, 93, 229, .18);
+      --c-bg: rgba(155, 93, 229, .06);
+      --nc: #00B894;
+      --nc2: #A8F0D8;
+      --ng: #008C6E;
+      --n-glow: rgba(0, 184, 148, .18);
+      --n-bg: rgba(0, 184, 148, .06);
+      --tr: cubic-bezier(.4, 0, .2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+    }
+
+    ::-webkit-scrollbar {
+      width: 3px;
+      height: 3px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-light);
+      border-radius: 4px;
+    }
+
+    /* ══ MODAL ══ */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(4px);
+      z-index: 999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      width: 400px;
+      max-width: 90%;
+      color: var(--text);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, .4);
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .api-input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      margin-bottom: 16px;
+      font-family: monospace;
+      text-align: left;
+      direction: ltr;
+    }
+
+    .api-input:focus {
+      border-color: var(--muted2);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .modal-btn {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .save-btn {
+      background: var(--nc);
+      color: #000;
+    }
+
+    .save-btn:hover {
+      background: var(--ng);
+    }
+
+    .cancel-btn {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .cancel-btn:hover {
+      background: var(--border-light);
+    }
+
+    /* ══ NAV ══ */
+    .nav {
+      height: 56px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 12px;
+      z-index: 50;
+    }
+
+    .nav-logo {
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, #fff, #777);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      padding-left: 14px;
+      margin-left: 14px;
+      border-left: 1px solid var(--border);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .expert-tabs {
+      display: flex;
+      flex: 1;
+      height: 100%;
+      overflow-x: auto;
+      gap: 4px;
+      align-items: center;
+      padding: 0 8px;
+    }
+
+    .expert-tabs::-webkit-scrollbar {
+      height: 0;
+    }
+
+    .etab {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 14px;
+      border: 1px solid transparent;
+      background: transparent;
+      border-radius: 10px;
+      cursor: pointer;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: all .25s var(--tr);
+    }
+
+    .etab:hover {
+      color: var(--text);
+      background: var(--card);
+    }
+
+    .etab.v.active {
+      color: var(--vc2);
+      background: var(--v-bg);
+      border-color: rgba(212, 175, 55, .2);
+    }
+
+    .etab.s.active {
+      color: var(--sc2);
+      background: var(--s-bg);
+      border-color: rgba(196, 123, 133, .2);
+    }
+
+    .etab.m.active {
+      color: var(--mc2);
+      background: var(--m-bg);
+      border-color: rgba(176, 184, 188, .2);
+    }
+
+    .etab-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background: var(--border-light);
+      transition: all .3s;
+    }
+
+    .etab.v.active .etab-dot {
+      background: var(--vc);
+      box-shadow: 0 0 8px var(--v-glow);
+    }
+
+    .etab.s.active .etab-dot {
+      background: var(--sc);
+      box-shadow: 0 0 8px var(--s-glow);
+    }
+
+    .etab.m.active .etab-dot {
+      background: var(--mc);
+      box-shadow: 0 0 8px var(--m-glow);
+    }
+
+    .etab-name {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .etab-role {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    .etab-badge {
+      min-width: 18px;
+      height: 18px;
+      border-radius: 9px;
+      background: var(--card2);
+      border: 1px solid var(--border);
+      font-size: 10px;
+      font-weight: 700;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 0 5px;
+      color: var(--muted);
+      transition: all .3s;
+    }
+
+    .etab-badge.show {
+      display: flex;
+    }
+
+    .etab.v.active .etab-badge {
+      background: var(--v-bg);
+      border-color: rgba(212, 175, 55, .3);
+      color: var(--vc);
+    }
+
+    .etab.s.active .etab-badge {
+      background: var(--s-bg);
+      border-color: rgba(196, 123, 133, .3);
+      color: var(--sc);
+    }
+
+    .etab.m.active .etab-badge {
+      background: var(--m-bg);
+      border-color: rgba(176, 184, 188, .3);
+      color: var(--mc);
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+      margin-right: auto;
+    }
+
+    .nav-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      transition: all .2s;
+    }
+
+    .nav-btn:hover {
+      border-color: var(--muted);
+      color: var(--text);
+    }
+
+    .nav-btn.active-info {
+      border-color: var(--muted2);
+      color: var(--text);
+      background: var(--card2);
+    }
+
+    /* ══ INFO PANEL ══ */
+    .info-panel {
+      flex-shrink: 0;
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height .4s var(--tr);
+      border-bottom: 0px solid var(--border);
+    }
+
+    .info-panel.open {
+      max-height: 200px;
+      border-bottom-width: 1px;
+    }
+
+    .info-inner {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 16px 24px;
+      background: var(--surface);
+    }
+
+    .info-av {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .info-av.v {
+      background: linear-gradient(135deg, var(--vc), var(--vg));
+      box-shadow: 0 0 20px var(--v-glow);
+    }
+
+    .info-av.s {
+      background: linear-gradient(135deg, var(--sc), var(--sp));
+      box-shadow: 0 0 20px var(--s-glow);
+    }
+
+    .info-av.m {
+      background: linear-gradient(135deg, var(--mc), var(--mg));
+      box-shadow: 0 0 20px var(--m-glow);
+    }
+
+    .info-body {
+      flex: 1;
+    }
+
+    .info-name {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 3px;
+    }
+
+    .info-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      margin-bottom: 10px;
+    }
+
+    .info-title.v {
+      color: var(--vc);
+    }
+
+    .info-title.s {
+      color: var(--sc);
+    }
+
+    .info-title.m {
+      color: var(--mc);
+    }
+
+    .info-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .info-tag {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--muted2);
+    }
+
+    .v-ep .info-tag {
+      border-color: rgba(212, 175, 55, .2);
+      color: var(--vc2);
+      background: rgba(212, 175, 55, .03);
+    }
+
+    .s-ep .info-tag {
+      border-color: rgba(196, 123, 133, .2);
+      color: var(--sc2);
+      background: rgba(196, 123, 133, .03);
+    }
+
+    .m-ep .info-tag {
+      border-color: rgba(176, 184, 188, .2);
+      color: var(--mc2);
+      background: rgba(176, 184, 188, .03);
+    }
+
+    .info-kpis {
+      display: flex;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .info-kpi {
+      padding: 10px 18px;
+      border-left: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .info-kpi:last-child {
+      border-left: none;
+    }
+
+    .info-kpi-val {
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .info-kpi-val.v {
+      color: var(--vc);
+    }
+
+    .info-kpi-val.s {
+      color: var(--sc);
+    }
+
+    .info-kpi-val.m {
+      color: var(--mc);
+    }
+
+    .info-kpi-lbl {
+      font-size: 9px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      margin-top: 4px;
+    }
+
+    /* ══ MAIN ══ */
+    .panels-wrap {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+      min-height: 0;
+    }
+
+    .ep {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      transition: opacity .35s, transform .35s;
+    }
+
+    .ep.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(10px);
+    }
+
+    .v-ep {
+      background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(212, 175, 55, .025) 0%, transparent 60%), var(--bg);
+    }
+
+    .s-ep {
+      background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(196, 123, 133, .025) 0%, transparent 60%), var(--bg);
+    }
+
+    .m-ep {
+      background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(176, 184, 188, .025) 0%, transparent 60%), var(--bg);
+    }
+
+    /* Sub-tabs */
+    .stabs {
+      flex-shrink: 0;
+      display: flex;
+      overflow-x: auto;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      padding: 0 16px;
+    }
+
+    .stabs::-webkit-scrollbar {
+      height: 0;
+    }
+
+    .stab {
+      padding: 12px 16px;
+      border: none;
+      background: none;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: all .25s;
+      letter-spacing: .3px;
+    }
+
+    .stab:hover {
+      color: var(--text);
+    }
+
+    .stab.v.active {
+      color: var(--vc2);
+      border-bottom-color: var(--vc);
+    }
+
+    .stab.s.active {
+      color: var(--sc2);
+      border-bottom-color: var(--sc);
+    }
+
+    .stab.m.active {
+      color: var(--mc2);
+      border-bottom-color: var(--mc);
+    }
+
+    /* ══ CHAT ══ */
+    .chat-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-height: 0;
+      scroll-behavior: smooth;
+      position: relative;
+    }
+
+    /* ══ DRAG OVERLAY ══ */
+    .drag-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      backdrop-filter: blur(6px);
+      border-radius: 0;
+      pointer-events: none;
+    }
+
+    .drag-overlay.active {
+      display: flex;
+    }
+
+    .drag-overlay-inner {
+      border: 2px dashed;
+      border-radius: 20px;
+      padding: 48px 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      background: rgba(8, 8, 8, .85);
+      text-align: center;
+      animation: pulseIn .4s var(--tr);
+    }
+
+    @keyframes pulseIn {
+      from {
+        transform: scale(.95);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .v-ep .drag-overlay-inner {
+      border-color: var(--vc);
+      box-shadow: 0 0 40px var(--v-glow);
+    }
+
+    .s-ep .drag-overlay-inner {
+      border-color: var(--sc);
+      box-shadow: 0 0 40px var(--s-glow);
+    }
+
+    .m-ep .drag-overlay-inner {
+      border-color: var(--mc);
+      box-shadow: 0 0 40px var(--m-glow);
+    }
+
+    .drag-icon {
+      font-size: 52px;
+    }
+
+    .drag-title {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .drag-sub {
+      font-size: 12px;
+      color: var(--muted2);
+    }
+
+    .v-ep .drag-title {
+      color: var(--vc);
+    }
+
+    .s-ep .drag-title {
+      color: var(--sc);
+    }
+
+    .m-ep .drag-title {
+      color: var(--mc);
+    }
+
+    /* ══ WELCOME CARD ══ */
+    .wc {
+      max-width: 600px;
+      width: 100%;
+      margin: auto;
+      padding: 36px 28px;
+      border-radius: 18px;
+      background: var(--card);
+      border: 1px solid var(--border-light);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, .4);
+      text-align: center;
+      animation: wcFade .5s var(--tr);
+    }
+
+    @keyframes wcFade {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .wc-emoji {
+      font-size: 44px;
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .wc-name {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .wc-name.v {
+      color: var(--vc);
+    }
+
+    .wc-name.s {
+      color: var(--sc);
+    }
+
+    .wc-name.m {
+      color: var(--mc);
+    }
+
+    .wc-desc {
+      font-size: 13px;
+      color: var(--muted2);
+      line-height: 1.8;
+      max-width: 480px;
+      margin: 0 auto 24px;
+    }
+
+    .wc-desc strong {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .wc-upload-hint {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      border: 1px dashed var(--border-light);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: all .25s;
+    }
+
+    .wc-upload-hint:hover {
+      border-color: var(--muted);
+      color: var(--text);
+    }
+
+    .v-ep .wc-upload-hint:hover {
+      border-color: var(--vc);
+      color: var(--vc2);
+    }
+
+    .s-ep .wc-upload-hint:hover {
+      border-color: var(--sc);
+      color: var(--sc2);
+    }
+
+    .m-ep .wc-upload-hint:hover {
+      border-color: var(--mc);
+      color: var(--mc2);
+    }
+
+    .sg {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+    }
+
+    .sg-card {
+      padding: 13px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      text-align: right;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      transition: all .25s var(--tr);
+    }
+
+    .sg-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .sg-card.v:hover {
+      border-color: var(--vc);
+      background: var(--v-bg);
+      box-shadow: 0 4px 16px var(--v-glow);
+    }
+
+    .sg-card.s:hover {
+      border-color: var(--sc);
+      background: var(--s-bg);
+      box-shadow: 0 4px 16px var(--s-glow);
+    }
+
+    .sg-card.m:hover {
+      border-color: var(--mc);
+      background: var(--m-bg);
+      box-shadow: 0 4px 16px var(--m-glow);
+    }
+
+    .sg-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .sg-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .sg-sub {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .sug-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .sr {
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .25s;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted2);
+    }
+
+    .sr:hover {
+      border-color: var(--sc);
+      color: var(--sc2);
+      background: var(--s-bg);
+    }
+
+    /* ══ MESSAGES ══ */
+    .msg-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+      max-width: 84%;
+      animation: msgIn .35s var(--tr);
+    }
+
+    @keyframes msgIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .msg-row.user {
+      flex-direction: row-reverse;
+      margin-left: auto;
+    }
+
+    .msg-row.bot {
+      margin-right: auto;
+    }
+
+    .msg-av {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+    }
+
+    .msg-av.u {
+      background: var(--card2);
+      border: 1px solid var(--border-light);
+      color: var(--text);
+    }
+
+    .msg-av.victor {
+      background: linear-gradient(135deg, var(--vc), var(--vg));
+      color: #000;
+    }
+
+    .msg-av.sofia {
+      background: linear-gradient(135deg, var(--sc), var(--sp));
+      color: #000;
+    }
+
+    .msg-av.marco {
+      background: linear-gradient(135deg, var(--mc), var(--mg));
+      color: #000;
+    }
+
+    .msg-bub {
+      padding: 14px 18px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.8;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, .2);
+    }
+
+    .msg-row.user .msg-bub {
+      background: var(--card2);
+      border: 1px solid var(--border-light);
+      border-bottom-left-radius: 4px;
+      color: var(--text);
+    }
+
+    .msg-row.bot .msg-bub {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-bottom-right-radius: 4px;
+    }
+
+    .v-ep .msg-row.bot .msg-bub {
+      border-right: 2px solid var(--vc);
+    }
+
+    .s-ep .msg-row.bot .msg-bub {
+      border-right: 2px solid var(--sc);
+    }
+
+    .m-ep .msg-row.bot .msg-bub {
+      border-right: 2px solid var(--mc);
+    }
+
+    .msg-time {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 6px;
+      letter-spacing: .3px;
+    }
+
+    .msg-row.user .msg-time {
+      text-align: left;
+    }
+
+    .bot-lbl {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+
+    .bot-lbl.v {
+      background: rgba(212, 175, 55, .05);
+      border: 1px solid rgba(212, 175, 55, .2);
+      color: var(--vc);
+    }
+
+    .bot-lbl.s {
+      background: rgba(196, 123, 133, .05);
+      border: 1px solid rgba(196, 123, 133, .2);
+      color: var(--sc);
+    }
+
+    .bot-lbl.m {
+      background: rgba(176, 184, 188, .05);
+      border: 1px solid rgba(176, 184, 188, .2);
+      color: var(--mc);
+    }
+
+    /* ══ FILE CHIP IN MESSAGE ══ */
+    .msg-file-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      margin-bottom: 10px;
+      max-width: 280px;
+    }
+
+    .msg-file-thumb {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: 1px solid var(--border);
+    }
+
+    .msg-file-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      border: 1px solid var(--border);
+    }
+
+    .msg-file-icon.pdf {
+      background: rgba(220, 80, 80, .1);
+      border-color: rgba(220, 80, 80, .2);
+    }
+
+    .msg-file-icon.txt {
+      background: rgba(100, 160, 240, .1);
+      border-color: rgba(100, 160, 240, .2);
+    }
+
+    .msg-file-icon.img {
+      background: rgba(100, 200, 150, .1);
+      border-color: rgba(100, 200, 150, .2);
+    }
+
+    .msg-file-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .msg-file-name {
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text);
+    }
+
+    .msg-file-meta {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ══ ANALYSIS BADGE ══ */
+    .analysis-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      margin-bottom: 12px;
+    }
+
+    .analysis-badge.v {
+      background: rgba(212, 175, 55, .08);
+      border: 1px solid rgba(212, 175, 55, .25);
+      color: var(--vc);
+    }
+
+    .analysis-badge.s {
+      background: rgba(196, 123, 133, .08);
+      border: 1px solid rgba(196, 123, 133, .25);
+      color: var(--sc);
+    }
+
+    .analysis-badge.m {
+      background: rgba(176, 184, 188, .08);
+      border: 1px solid rgba(176, 184, 188, .25);
+      color: var(--mc);
+    }
+
+    /* quick replies */
+    .qr-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .qr {
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .qr:hover {
+      color: var(--text);
+    }
+
+    .v-ep .qr {
+      border-color: rgba(212, 175, 55, .2);
+      color: var(--vc2);
+    }
+
+    .v-ep .qr:hover {
+      background: rgba(212, 175, 55, .1);
+      border-color: var(--vc);
+    }
+
+    .s-ep .qr {
+      border-color: rgba(196, 123, 133, .2);
+      color: var(--sc2);
+    }
+
+    .s-ep .qr:hover {
+      background: rgba(196, 123, 133, .1);
+      border-color: var(--sc);
+    }
+
+    .m-ep .qr {
+      border-color: rgba(176, 184, 188, .2);
+      color: var(--mc2);
+    }
+
+    .m-ep .qr:hover {
+      background: rgba(176, 184, 188, .1);
+      border-color: var(--mc);
+    }
+
+    /* markdown */
+    .msg-bub strong {
+      font-weight: 800;
+    }
+
+    .v-ep .msg-bub strong {
+      color: var(--vc);
+    }
+
+    .s-ep .msg-bub strong {
+      color: var(--sc);
+    }
+
+    .m-ep .msg-bub strong {
+      color: var(--mc);
+    }
+
+    .msg-bub code {
+      background: var(--surface);
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .v-ep .msg-bub code {
+      color: var(--vc2);
+    }
+
+    .s-ep .msg-bub code {
+      color: var(--sc2);
+    }
+
+    .m-ep .msg-bub code {
+      color: var(--mc2);
+    }
+
+    .msg-bub h3 {
+      font-size: 15px;
+      font-weight: 800;
+      margin: 18px 0 8px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .msg-bub h4 {
+      font-size: 13px;
+      font-weight: 700;
+      margin: 12px 0 5px;
+    }
+
+    .v-ep .msg-bub h3 {
+      color: var(--vc);
+    }
+
+    .s-ep .msg-bub h3 {
+      color: var(--sc);
+    }
+
+    .m-ep .msg-bub h3 {
+      color: var(--mc);
+    }
+
+    .msg-bub ul,
+    .msg-bub ol {
+      padding-right: 22px;
+      margin: 10px 0;
+    }
+
+    .msg-bub li {
+      margin: 6px 0;
+    }
+
+    .msg-bub hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 16px 0;
+    }
+
+    .msg-bub blockquote {
+      padding: 10px 16px;
+      color: var(--muted2);
+      margin: 12px 0;
+      border-radius: 4px;
+      font-style: italic;
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+
+    .v-ep .msg-bub blockquote {
+      border-right: 3px solid var(--vc);
+    }
+
+    .s-ep .msg-bub blockquote {
+      border-right: 3px solid var(--sc);
+    }
+
+    .m-ep .msg-bub blockquote {
+      border-right: 3px solid var(--mc);
+    }
+
+    .msg-bub table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 12px;
+    }
+
+    .msg-bub th {
+      padding: 10px;
+      text-align: right;
+      border: 1px solid var(--border);
+      font-weight: 700;
+      background: var(--surface);
+    }
+
+    .msg-bub td {
+      padding: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .msg-bub tr:nth-child(even) td {
+      background: rgba(255, 255, 255, .01);
+    }
+
+    /* source citations */
+    .msg-bub .sources-section {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px dashed var(--border-light);
+    }
+
+    .msg-bub .sources-section h3 {
+      font-size: 13px;
+      margin-top: 0;
+    }
+
+    .v-ep .msg-bub .sources-section {
+      border-top-color: rgba(212, 175, 55, .2);
+    }
+
+    .s-ep .msg-bub .sources-section {
+      border-top-color: rgba(196, 123, 133, .2);
+    }
+
+    .m-ep .msg-bub .sources-section {
+      border-top-color: rgba(176, 184, 188, .2);
+    }
+
+    .confidence-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 5px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .5px;
+      margin-bottom: 10px;
+    }
+
+    .confidence-badge.high {
+      background: rgba(80, 200, 120, .08);
+      border: 1px solid rgba(80, 200, 120, .25);
+      color: #50c878;
+    }
+
+    .confidence-badge.medium {
+      background: rgba(240, 180, 50, .08);
+      border: 1px solid rgba(240, 180, 50, .25);
+      color: #f0b432;
+    }
+
+    .confidence-badge.low {
+      background: rgba(220, 80, 80, .08);
+      border: 1px solid rgba(220, 80, 80, .25);
+      color: #dc5050;
+    }
+
+    .referral-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-top: 10px;
+      cursor: pointer;
+      transition: all .25s;
+    }
+
+    .referral-badge.to-victor {
+      background: var(--v-bg);
+      border: 1px solid rgba(212, 175, 55, .25);
+      color: var(--vc);
+    }
+
+    .referral-badge.to-sofia {
+      background: var(--s-bg);
+      border: 1px solid rgba(196, 123, 133, .25);
+      color: var(--sc);
+    }
+
+    .referral-badge.to-marco {
+      background: var(--m-bg);
+      border: 1px solid rgba(176, 184, 188, .25);
+      color: var(--mc);
+    }
+
+    .referral-badge:hover {
+      transform: translateY(-1px);
+    }
+
+    /* typing */
+    .typing-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+    }
+
+    .typing-bub {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      border-bottom-right-radius: 4px;
+      padding: 14px 18px;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .tdot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      animation: td 1.4s infinite ease-in-out;
+      opacity: .5;
+    }
+
+    @keyframes td {
+
+      0%,
+      80%,
+      100% {
+        transform: scale(.8);
+        opacity: .3;
+      }
+
+      40% {
+        transform: scale(1.2);
+        opacity: 1;
+      }
+    }
+
+    /* analysis typing - special */
+    .typing-row.analyzing .typing-bub {
+      border-style: dashed;
+    }
+
+    .typing-row.analyzing .typing-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      margin-left: 10px;
+      animation: scanPulse 2s infinite;
+    }
+
+    .v-ep .typing-row.analyzing .typing-bub {
+      border-color: rgba(212, 175, 55, .4);
+    }
+
+    .s-ep .typing-row.analyzing .typing-bub {
+      border-color: rgba(196, 123, 133, .4);
+    }
+
+    .m-ep .typing-row.analyzing .typing-bub {
+      border-color: rgba(176, 184, 188, .4);
+    }
+
+    .v-ep .typing-row.analyzing .typing-label {
+      color: var(--vc);
+    }
+
+    .s-ep .typing-row.analyzing .typing-label {
+      color: var(--sc);
+    }
+
+    .m-ep .typing-row.analyzing .typing-label {
+      color: var(--mc);
+    }
+
+    @keyframes scanPulse {
+
+      0%,
+      100% {
+        opacity: .5;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
+
+    /* ══ INPUT BAR ══ */
+    .input-bar {
+      flex-shrink: 0;
+      padding: 12px 20px 18px;
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+    }
+
+    /* File preview chip */
+    .file-preview {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border-light);
+      background: var(--card);
+      margin-bottom: 10px;
+      animation: slideDown .25s var(--tr);
+    }
+
+    .file-preview.show {
+      display: flex;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fp-thumb {
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      object-fit: cover;
+      border: 1px solid var(--border);
+    }
+
+    .fp-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .fp-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .fp-name {
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text);
+    }
+
+    .fp-type {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .fp-analyze-hint {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .v-ep .fp-analyze-hint {
+      color: var(--vc);
+      background: var(--v-bg);
+      border: 1px solid rgba(212, 175, 55, .2);
+    }
+
+    .s-ep .fp-analyze-hint {
+      color: var(--sc);
+      background: var(--s-bg);
+      border: 1px solid rgba(196, 123, 133, .2);
+    }
+
+    .m-ep .fp-analyze-hint {
+      color: var(--mc);
+      background: var(--m-bg);
+      border: 1px solid rgba(176, 184, 188, .2);
+    }
+
+    .fp-remove {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+      transition: all .2s;
+    }
+
+    .fp-remove:hover {
+      background: rgba(220, 80, 80, .1);
+      color: #e05;
+      border: 1px solid rgba(220, 80, 80, .2);
+    }
+
+    .input-box {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      background: var(--card);
+      border: 1px solid var(--border-light);
+      border-radius: 14px;
+      padding: 10px 12px;
+      transition: all .25s;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, .25);
+    }
+
+    .v-ep .input-box:focus-within {
+      border-color: var(--vc);
+      box-shadow: 0 0 0 1px rgba(212, 175, 55, .2), 0 4px 24px rgba(0, 0, 0, .3);
+    }
+
+    .s-ep .input-box:focus-within {
+      border-color: var(--sc);
+      box-shadow: 0 0 0 1px rgba(196, 123, 133, .2), 0 4px 24px rgba(0, 0, 0, .3);
+    }
+
+    .m-ep .input-box:focus-within {
+      border-color: var(--mc);
+      box-shadow: 0 0 0 1px rgba(176, 184, 188, .2), 0 4px 24px rgba(0, 0, 0, .3);
+    }
+
+    .input-box.has-file {
+      border-style: dashed;
+    }
+
+    .v-ep .input-box.has-file {
+      border-color: rgba(212, 175, 55, .4);
+    }
+
+    .s-ep .input-box.has-file {
+      border-color: rgba(196, 123, 133, .4);
+    }
+
+    .m-ep .input-box.has-file {
+      border-color: rgba(176, 184, 188, .4);
+    }
+
+    /* attach button */
+    .attach-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all .2s;
+    }
+
+    .attach-btn:hover {
+      border-color: var(--muted2);
+      color: var(--text);
+    }
+
+    .v-ep .attach-btn.has-file {
+      border-color: var(--vc);
+      color: var(--vc);
+      background: var(--v-bg);
+    }
+
+    .s-ep .attach-btn.has-file {
+      border-color: var(--sc);
+      color: var(--sc);
+      background: var(--s-bg);
+    }
+
+    .m-ep .attach-btn.has-file {
+      border-color: var(--mc);
+      color: var(--mc);
+      background: var(--m-bg);
+    }
+
+    textarea.tinp {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-family: 'Tajawal', sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      resize: none;
+      max-height: 120px;
+      min-height: 22px;
+      height: 22px;
+      overflow-y: auto;
+      padding: 3px 4px;
+    }
+
+    textarea.tinp::placeholder {
+      color: var(--muted);
+      opacity: .8;
+      font-weight: 400;
+    }
+
+    .sbtn {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: none;
+      flex-shrink: 0;
+      color: #000;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .25s cubic-bezier(.34, 1.56, .64, 1);
+    }
+
+    .sbtn:hover {
+      transform: translateY(-2px) scale(1.08);
+    }
+
+    .sbtn:disabled {
+      opacity: .3;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .sbtn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .v-ep .sbtn {
+      background: linear-gradient(135deg, var(--vc), var(--vg));
+      box-shadow: 0 4px 12px var(--v-glow);
+    }
+
+    .s-ep .sbtn {
+      background: linear-gradient(135deg, var(--sc), var(--sp));
+      box-shadow: 0 4px 12px var(--s-glow);
+    }
+
+    .m-ep .sbtn {
+      background: linear-gradient(135deg, var(--mc), var(--mg));
+      box-shadow: 0 4px 12px var(--m-glow);
+    }
+
+    .input-hint {
+      font-size: 10px;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 8px;
+      letter-spacing: .3px;
+      opacity: .6;
+    }
+
+    /* ══ FOOTER ══ */
+    .footer {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px 20px;
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-text {
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .footer-name {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, #fff, #888);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .footer-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--border-light);
+    }
+
+    /* ══ SUPPORTED TYPES TOOLTIP ══ */
+    .types-hint {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .type-pill {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: var(--surface);
+    }
+
+    @media(max-width:600px) {
+
+      .etab-role,
+      .sg-sub {
+        display: none;
+      }
+
+      .info-kpis {
+        display: none;
+      }
+
+      .chat-area {
+        padding: 18px 14px;
+      }
+
+      .input-bar {
+        padding: 10px 14px 16px;
+      }
+
+      .msg-bub {
+        font-size: 13px;
+        padding: 12px 15px;
+      }
+
+      .nav-logo {
+        display: none;
+      }
+    }
+  </style>
+  <style id="clara-styles">
+    /* ══ CLARA RULES ══ */
+    .etab.c.active {
+      color: var(--cc2);
+      background: var(--c-bg);
+      border-color: rgba(155, 93, 229, .2);
+    }
+
+    .etab.c.active .etab-dot {
+      background: var(--cc);
+      box-shadow: 0 0 8px var(--c-glow);
+    }
+
+    .etab.c.active .etab-badge {
+      background: var(--c-bg);
+      border-color: rgba(155, 93, 229, .3);
+      color: var(--cc);
+    }
+
+    .info-av.c {
+      background: linear-gradient(135deg, var(--cc), var(--cg));
+      box-shadow: 0 0 20px var(--c-glow);
+    }
+
+    .info-title.c {
+      color: var(--cc);
+    }
+
+    .c-ep .info-tag {
+      border-color: rgba(155, 93, 229, .2);
+      color: var(--cc2);
+      background: rgba(155, 93, 229, .03);
+    }
+
+    .info-kpi-val.c {
+      color: var(--cc);
+    }
+
+    .c-ep {
+      background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(155, 93, 229, .025) 0%, transparent 60%), var(--bg);
+    }
+
+    .stab.c.active {
+      color: var(--cc2);
+      border-bottom-color: var(--cc);
+    }
+
+    .c-ep .drag-overlay-inner {
+      border-color: var(--cc);
+      box-shadow: 0 0 40px var(--c-glow);
+    }
+
+    .c-ep .drag-title {
+      color: var(--cc);
+    }
+
+    .wc-name.c {
+      color: var(--cc);
+    }
+
+    .c-ep .wc-upload-hint:hover {
+      border-color: var(--cc);
+      color: var(--cc2);
+    }
+
+    .sg-card.c:hover {
+      border-color: var(--cc);
+      background: var(--c-bg);
+      box-shadow: 0 4px 16px var(--c-glow);
+    }
+
+    .msg-av.clara {
+      background: linear-gradient(135deg, var(--cc), var(--cg));
+      color: #000;
+    }
+
+    .c-ep .msg-row.bot .msg-bub {
+      border-right: 2px solid var(--cc);
+    }
+
+    .bot-lbl.c {
+      background: rgba(155, 93, 229, .05);
+      border: 1px solid rgba(155, 93, 229, .2);
+      color: var(--cc);
+    }
+
+    .analysis-badge.c {
+      background: rgba(155, 93, 229, .08);
+      border: 1px solid rgba(155, 93, 229, .25);
+      color: var(--cc);
+    }
+
+    .c-ep .qr {
+      border-color: rgba(155, 93, 229, .2);
+      color: var(--cc2);
+    }
+
+    .c-ep .qr:hover {
+      background: rgba(155, 93, 229, .1);
+      border-color: var(--cc);
+    }
+
+    .c-ep .msg-bub strong {
+      color: var(--cc);
+    }
+
+    .c-ep .msg-bub code {
+      color: var(--cc2);
+    }
+
+    .c-ep .msg-bub h3 {
+      color: var(--cc);
+    }
+
+    .c-ep .msg-bub blockquote {
+      border-right: 3px solid var(--cc);
+    }
+
+    .c-ep .msg-bub .sources-section {
+      border-top-color: rgba(155, 93, 229, .2);
+    }
+
+    .referral-badge.to-clara {
+      background: var(--c-bg);
+      border: 1px solid rgba(155, 93, 229, .25);
+      color: var(--cc);
+    }
+
+    .c-ep .typing-row.analyzing .typing-bub {
+      border-color: rgba(155, 93, 229, .4);
+    }
+
+    .c-ep .typing-row.analyzing .typing-label {
+      color: var(--cc);
+    }
+
+    .c-ep .fp-analyze-hint {
+      color: var(--cc);
+      background: var(--c-bg);
+      border: 1px solid rgba(155, 93, 229, .2);
+    }
+
+    .c-ep .input-box:focus-within {
+      border-color: var(--cc);
+      box-shadow: 0 0 0 1px rgba(155, 93, 229, .2), 0 4px 24px rgba(0, 0, 0, .3);
+    }
+
+    .c-ep .input-box.has-file {
+      border-color: rgba(155, 93, 229, .4);
+    }
+
+    .c-ep .attach-btn.has-file {
+      border-color: var(--cc);
+      color: var(--cc);
+      background: var(--c-bg);
+    }
+
+    .c-ep .sbtn {
+      background: linear-gradient(135deg, var(--cc), var(--cg));
+      box-shadow: 0 4px 12px var(--c-glow);
+    }
+  </style>
+  <style id="nadia-styles">
+    /* ══ NADIA RULES ══ */
+    .etab.n.active {
+      color: var(--nc2);
+      background: var(--n-bg);
+      border-color: rgba(0, 184, 148, .2);
+    }
+
+    .etab.n.active .etab-dot {
+      background: var(--nc);
+      box-shadow: 0 0 8px var(--n-glow);
+    }
+
+    .etab.n.active .etab-badge {
+      background: var(--n-bg);
+      border-color: rgba(0, 184, 148, .3);
+      color: var(--nc);
+    }
+
+    .info-av.n {
+      background: linear-gradient(135deg, var(--nc), var(--ng));
+      box-shadow: 0 0 20px var(--n-glow);
+    }
+
+    .info-title.n {
+      color: var(--nc);
+    }
+
+    .n-ep .info-tag {
+      border-color: rgba(0, 184, 148, .2);
+      color: var(--nc2);
+      background: rgba(0, 184, 148, .03);
+    }
+
+    .info-kpi-val.n {
+      color: var(--nc);
+    }
+
+    .n-ep {
+      background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(0, 184, 148, .025) 0%, transparent 60%), var(--bg);
+    }
+
+    .stab.n.active {
+      color: var(--nc2);
+      border-bottom-color: var(--nc);
+    }
+
+    .n-ep .drag-overlay-inner {
+      border-color: var(--nc);
+      box-shadow: 0 0 40px var(--n-glow);
+    }
+
+    .n-ep .drag-title {
+      color: var(--nc);
+    }
+
+    .wc-name.n {
+      color: var(--nc);
+    }
+
+    .n-ep .wc-upload-hint:hover {
+      border-color: var(--nc);
+      color: var(--nc2);
+    }
+
+    .sg-card.n:hover {
+      border-color: var(--nc);
+      background: var(--n-bg);
+      box-shadow: 0 4px 16px var(--n-glow);
+    }
+
+    .msg-av.nadia {
+      background: linear-gradient(135deg, var(--nc), var(--ng));
+      color: #000;
+    }
+
+    .n-ep .msg-row.bot .msg-bub {
+      border-right: 2px solid var(--nc);
+    }
+
+    .bot-lbl.n {
+      background: rgba(0, 184, 148, .05);
+      border: 1px solid rgba(0, 184, 148, .2);
+      color: var(--nc);
+    }
+
+    .analysis-badge.n {
+      background: rgba(0, 184, 148, .08);
+      border: 1px solid rgba(0, 184, 148, .25);
+      color: var(--nc);
+    }
+
+    .n-ep .qr {
+      border-color: rgba(0, 184, 148, .2);
+      color: var(--nc2);
+    }
+
+    .n-ep .qr:hover {
+      background: rgba(0, 184, 148, .1);
+      border-color: var(--nc);
+    }
+
+    .n-ep .msg-bub strong {
+      color: var(--nc);
+    }
+
+    .n-ep .msg-bub code {
+      color: var(--nc2);
+    }
+
+    .n-ep .msg-bub h3 {
+      color: var(--nc);
+    }
+
+    .n-ep .msg-bub blockquote {
+      border-right: 3px solid var(--nc);
+    }
+
+    .n-ep .msg-bub .sources-section {
+      border-top-color: rgba(0, 184, 148, .2);
+    }
+
+    .referral-badge.to-nadia {
+      background: var(--n-bg);
+      border: 1px solid rgba(0, 184, 148, .25);
+      color: var(--nc);
+    }
+
+    .n-ep .typing-row.analyzing .typing-bub {
+      border-color: rgba(0, 184, 148, .4);
+    }
+
+    .n-ep .typing-row.analyzing .typing-label {
+      color: var(--nc);
+    }
+
+    .n-ep .fp-analyze-hint {
+      color: var(--nc);
+      background: var(--n-bg);
+      border: 1px solid rgba(0, 184, 148, .2);
+    }
+
+    .n-ep .input-box:focus-within {
+      border-color: var(--nc);
+      box-shadow: 0 0 0 1px rgba(0, 184, 148, .2), 0 4px 24px rgba(0, 0, 0, .3);
+    }
+
+    .n-ep .input-box.has-file {
+      border-color: rgba(0, 184, 148, .4);
+    }
+
+    .n-ep .attach-btn.has-file {
+      border-color: var(--nc);
+      color: var(--nc);
+      background: var(--n-bg);
+    }
+
+    .n-ep .sbtn {
+      background: linear-gradient(135deg, var(--nc), var(--ng));
+      box-shadow: 0 4px 12px var(--n-glow);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══ NAV ══ -->
+  <div class="nav">
+    <div style="display:flex;align-items:center;flex-shrink:0;">
+      <span style="font-size:18px;margin-left:10px;">🤖</span>
+      <span class="nav-logo">AI Experts</span>
+    </div>
+    <div class="expert-tabs">
+      <button class="etab v active" onclick="switchTo('victor',this)">
+        <span class="etab-dot"></span>
+        <div>
+          <div class="etab-name">Victor Kane</div>
+          <div class="etab-role">خبير تسويق · 40 سنة</div>
+        </div>
+        <span class="etab-badge" id="vBadge">0</span>
+      </button>
+      <button class="etab s" onclick="switchTo('sofia',this)">
+        <span class="etab-dot"></span>
+        <div>
+          <div class="etab-name">Sofia Reyes</div>
+          <div class="etab-role">تصميم سوشيال · 40 سنة</div>
+        </div>
+        <span class="etab-badge" id="sBadge">0</span>
+      </button>
+      <button class="etab m" onclick="switchTo('marco',this)">
+        <span class="etab-dot"></span>
+        <div>
+          <div class="etab-name">Marco Vitelli</div>
+          <div class="etab-role">شعارات وهوية بصرية · 40 سنة</div>
+        </div>
+        <span class="etab-badge" id="mBadge">0</span>
+      </button>
+      <button class="etab c" onclick="switchTo('clara',this)">
+        <span class="etab-dot"></span>
+        <div>
+          <div class="etab-name">Clara Woods</div>
+          <div class="etab-role">صناع المحتوى · 20 سنة</div>
+        </div>
+        <span class="etab-badge" id="cBadge">0</span>
+      </button>
+      <button class="etab n" onclick="switchTo('nadia',this)">
+        <span class="etab-dot"></span>
+        <div>
+          <div class="etab-name">Nadia Sterling</div>
+          <div class="etab-role">ميديا باينغ · 15 سنة</div>
+        </div>
+        <span class="etab-badge" id="nBadge">0</span>
+      </button>
+    </div>
+    <div class="nav-actions">
+      <button class="nav-btn" onclick="openSettings()" title="إعدادات API">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path
+            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+          </path>
+        </svg>
+      </button>
+      <button class="nav-btn" id="infoToggleBtn" onclick="toggleInfo()" title="معلومات المساعد">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+      </button>
+      <button class="nav-btn" onclick="clearCurrent()" title="محادثة جديدة">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="1 4 1 10 7 10" />
+          <path d="M3.51 15a9 9 0 1 0 .49-3.1" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ══ INFO PANEL ══ -->
+  <div class="info-panel" id="infoPanel">
+    <div id="info-victor">
+      <div class="info-inner v-ep">
+        <div class="info-av v">📊</div>
+        <div class="info-body">
+          <div class="info-name">Victor Kane</div>
+          <div class="info-title v">استراتيجي تسويق دولي · نيويورك / لندن / دبي</div>
+          <div class="info-tags">
+            <span class="info-tag">🎯 Brand Strategy</span><span class="info-tag">📈 Growth</span>
+            <span class="info-tag">💰 Paid Ads</span><span class="info-tag">🔍 SEO</span>
+            <span class="info-tag">✍️ Copywriting</span><span class="info-tag">📊 Analytics</span>
+            <span class="info-tag">📂 تحليل ملفات التسويق</span>
+          </div>
+        </div>
+        <div class="info-kpis">
+          <div class="info-kpi">
+            <div class="info-kpi-val v">40+</div>
+            <div class="info-kpi-lbl">سنة</div>
+          </div>
+          <div class="info-kpi">
+            <div class="info-kpi-val v">500+</div>
+            <div class="info-kpi-lbl">حملة</div>
+          </div>
+          <div class="info-kpi">
+            <div class="info-kpi-val v">$2B+</div>
+            <div class="info-kpi-lbl">ميزانية</div>
+          </div>
+          <div class="info-kpi">
+            <div class="info-kpi-val v">60+</div>
+            <div class="info-kpi-lbl">دولة</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="info-sofia" style="display:none;">
+      <div class="info-inner s-ep">
+        <div class="info-av s">🎨</div>
+        <div class="info-body">
+          <div class="info-name">Sofia Reyes</div>
+          <div class="info-title s">خبيرة تصميم بوسترات السوشيال · برشلونة / نيويورك</div>
+          <div class="info-tags">
+            <span class="info-tag">📸 Instagram</span><span class="info-tag">👍 Facebook</span>
+            <span class="info-tag">🎵 TikTok</span><span class="info-tag">💼 LinkedIn</span>
+            <span class="info-tag">🎨 نظرية الألوان</span><span class="info-tag">📐 المقاسات</span>
+            <span class="info-tag">🖼️ تحليل التصاميم</span>
+          </div>
+        </div>
+        <div class="info-kpis">
+          <div class="info-kpi">
+            <div class="info-kpi-val s">40+</div>
+            <div class="info-kpi-lbl">سنة</div>
+          </div>
+          <div class="info-kpi">
+            <div class="info-kpi-val s">15K+</div>
+            <div class="info-kpi-lbl">بوستر</div>
+          </div>
+          <div class="info-kpi">
+            <div class="info-kpi-val s">6</div>
+            <div class="info-kpi-lbl">منصات</div>
+          </div>
+          <div class="info-kpi">
+            <div class="info-kpi-val s">300+</div>
+            <div class="info-kpi-lbl">عميل</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="info-marco" style="display:none;">
+      <div class="info-inner m-ep">
+        <div class="info-av m">✏️</div>
+        <div class="info-body">
+          <div class="info-name">Marco Vitelli</div>
+          <div class="info-title m">خبير تصميم الشعارات والهوية البصرية · ميلانو / دبي</div>
+          <div class="info-tags">
+            <span class="info-tag">✏️ Logo Design</span><span class="info-tag">🎨 Visual Identity</span>
+            <span class="info-tag">📋 Brand Guidelines</span><span class="info-tag">🖋️ Typography</span>
+            <span class="info-tag">🔄 Rebranding</span><span class="info-tag">🔍 تحليل الشعارات</span>
+          </div>
+        </div>
+        <div class="info-kpis">
+          <div class="info-kpi">
+            <div class="info-kpi-val m">40+</div>
+            <div class="info-kpi-lbl">سنة</div>
+          </div>
+          <div class="info-kpi">
+            <div class="info-kpi-val m">3.2K+</div>
+            <div class="info-kpi-lbl">شعار</div>
+          </div>
+          <div class="info-kpi">
+            <div class="info-kpi-val m">800+</div>
+            <div class="info-kpi-lbl">هوية</div>
+          </div>
+          <div class="info-kpi">
+            <div class="info-kpi-val m">45+</div>
+            <div class="info-kpi-lbl">دولة</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="info-clara" style="display:none;">
+      <div class="info-inner c-ep">
+        <div class="info-av c">✍️</div>
+        <div class="info-body">
+          <div class="info-name">Clara Woods</div>
+          <div class="info-title c">خبيرة صناعة وتسويق المحتوى · لندن / دبي</div>
+          <div class="info-tags">
+            <span class="info-tag">✍️ Copywriting</span><span class="info-tag">📝 Blogging</span>
+            <span class="info-tag">📈 Content Strategy</span><span class="info-tag">🔍 SEO</span>
+            <span class="info-tag">📚 Storytelling</span><span class="info-tag">📖 تحليل النصوص</span>
+          </div>
+        </div>
+        <div class="info-kpis">
+          <div class="info-kpi">
+            <div class="info-kpi-val c">20+</div>
+            <div class="info-kpi-lbl">سنة</div>
+          </div>
+          <div class="info-kpi">
+            <div class="info-kpi-val c">5K+</div>
+            <div class="info-kpi-lbl">مقال وقصة</div>
+          </div>
+          <div class="info-kpi">
+            <div class="info-kpi-val c">10M+</div>
+            <div class="info-kpi-lbl">قراءة</div>
+          </div>
+          <div class="info-kpi">
+            <div class="info-kpi-val c">50+</div>
+            <div class="info-kpi-lbl">براند</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="info-nadia" style="display:none;">
+      <div class="info-inner n-ep">
+        <div class="info-av n">💰</div>
+        <div class="info-body">
+          <div class="info-name">Nadia Sterling</div>
+          <div class="info-title n">خبيرة ميديا باينغ وإعلانات مدفوعة · 15 سنة</div>
+          <div class="info-tags">
+            <span class="info-tag">💰 Meta Ads</span><span class="info-tag">📊 Google Ads</span>
+            <span class="info-tag">🎵 TikTok Ads</span><span class="info-tag">📱 Snapchat Ads</span>
+            <span class="info-tag">🔄 Retargeting</span><span class="info-tag">📈 تحليل الحملات</span>
+          </div>
+        </div>
+        <div class="info-kpis">
+          <div class="info-kpi">
+            <div class="info-kpi-val n">15+</div>
+            <div class="info-kpi-lbl">سنة</div>
+          </div>
+          <div class="info-kpi">
+            <div class="info-kpi-val n">$500M+</div>
+            <div class="info-kpi-lbl">ميزانية</div>
+          </div>
+          <div class="info-kpi">
+            <div class="info-kpi-val n">2K+</div>
+            <div class="info-kpi-lbl">حملة</div>
+          </div>
+          <div class="info-kpi">
+            <div class="info-kpi-val n">40+</div>
+            <div class="info-kpi-lbl">دولة</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PANELS ══ -->
+  <div class="panels-wrap">
+
+    <!-- hidden file inputs -->
+    <input type="file" id="fileV" style="display:none" accept="image/*,.pdf,.txt,.md,.csv"
+      onchange="handleFile(event,'v')" />
+    <input type="file" id="fileS" style="display:none" accept="image/*,.pdf,.txt,.md,.csv"
+      onchange="handleFile(event,'s')" />
+    <input type="file" id="fileM" style="display:none" accept="image/*,.pdf,.txt,.md,.csv"
+      onchange="handleFile(event,'m')" />
+    <input type="file" id="fileC" style="display:none" accept="image/*,.pdf,.txt,.md,.csv"
+      onchange="handleFile(event,'c')" />
+    <input type="file" id="fileN" style="display:none" accept="image/*,.pdf,.txt,.md,.csv"
+      onchange="handleFile(event,'n')" />
+
+    <!-- ══ VICTOR ══ -->
+    <div class="ep v-ep" id="ep-victor" ondragover="dragOver(event,'v')" ondragleave="dragLeave('v')"
+      ondrop="handleDrop(event,'v')">
+      <div class="stabs">
+        <button class="stab v active" onclick="setVD(this,'عام')">🌐 عام</button>
+        <button class="stab v" onclick="setVD(this,'استراتيجية البراند')">🎯 Brand</button>
+        <button class="stab v" onclick="setVD(this,'التسويق الرقمي')">💻 Digital</button>
+        <button class="stab v" onclick="setVD(this,'السوشيال ميديا')">📱 Social</button>
+        <button class="stab v" onclick="setVD(this,'الإعلانات المدفوعة')">💰 Paid Ads</button>
+        <button class="stab v" onclick="setVD(this,'SEO والمحتوى')">🔍 SEO</button>
+        <button class="stab v" onclick="setVD(this,'Email Marketing')">📧 Email</button>
+        <button class="stab v" onclick="setVD(this,'التحليل والبيانات')">📊 Analytics</button>
+      </div>
+      <div class="chat-area" id="chat-victor">
+        <div class="drag-overlay" id="drag-v">
+          <div class="drag-overlay-inner">
+            <div class="drag-icon">📊</div>
+            <div class="drag-title">أفلت الملف للتحليل التسويقي</div>
+            <div class="drag-sub">صور · PDF · ملفات نصية</div>
+          </div>
+        </div>
+        <div class="wc" id="wc-victor">
+          <span class="wc-emoji">📊</span>
+          <div class="wc-name v">Victor Kane</div>
+          <div class="wc-desc">استراتيجي تسويق دولي بخبرة <strong>40+ سنة</strong> عمل مع Nike وCoca-Cola وApple. يمكنه
+            تحليل ملفاتك التسويقية وتقديم رأيه الاحترافي.</div>
+          <div class="wc-upload-hint" onclick="triggerFile('v')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+            </svg>
+            ارفع ملف للتحليل التسويقي العميق
+            <div class="types-hint">
+              <span class="type-pill">🖼️ صور</span>
+              <span class="type-pill">📄 PDF</span>
+              <span class="type-pill">📝 TXT</span>
+              <span class="type-pill">📊 CSV</span>
+            </div>
+          </div>
+          <div class="sg">
+            <div class="sg-card v" onclick="vSend('أريد بناء استراتيجية تسويقية من الصفر')"><span
+                class="sg-icon">🎯</span>
+              <div>
+                <div class="sg-text">استراتيجية تسويقية</div>
+                <div class="sg-sub">من الصفر</div>
+              </div>
+            </div>
+            <div class="sg-card v" onclick="vSend('كيف أبني هوية براند قوية؟')"><span class="sg-icon">🏆</span>
+              <div>
+                <div class="sg-text">بناء البراند</div>
+                <div class="sg-sub">Brand Positioning</div>
+              </div>
+            </div>
+            <div class="sg-card v" onclick="vSend('كيف أزيد مبيعاتي عبر الإنترنت؟')"><span class="sg-icon">📈</span>
+              <div>
+                <div class="sg-text">زيادة المبيعات</div>
+                <div class="sg-sub">Growth Marketing</div>
+              </div>
+            </div>
+            <div class="sg-card v" onclick="vSend('ما أفضل استراتيجيات الإعلانات المدفوعة؟')"><span
+                class="sg-icon">💰</span>
+              <div>
+                <div class="sg-text">Paid Ads</div>
+                <div class="sg-sub">Meta & Google</div>
+              </div>
+            </div>
+            <div class="sg-card v" onclick="vSend('كيف أكتب محتوى تسويقي يقنع ويبيع؟')"><span class="sg-icon">✍️</span>
+              <div>
+                <div class="sg-text">Copywriting</div>
+                <div class="sg-sub">محتوى يبيع</div>
+              </div>
+            </div>
+            <div class="sg-card v" onclick="vSend('ما KPIs الأهم في تتبع أداء الحملات؟')"><span
+                class="sg-icon">📊</span>
+              <div>
+                <div class="sg-text">KPIs & Analytics</div>
+                <div class="sg-sub">قياس النتائج</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="input-bar" id="ibar-v">
+        <div class="file-preview" id="fp-v">
+          <div id="fp-v-thumb"></div>
+          <div class="fp-info">
+            <div class="fp-name" id="fp-v-name">—</div>
+            <div class="fp-type" id="fp-v-type">—</div>
+          </div>
+          <span class="fp-analyze-hint">جاهز للتحليل التسويقي ✦</span>
+          <button class="fp-remove" onclick="clearFile('v')">✕</button>
+        </div>
+        <div class="input-box" id="ibox-v">
+          <button class="attach-btn" id="ab-v" onclick="triggerFile('v')" title="إرفاق ملف">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+            </svg>
+          </button>
+          <textarea class="tinp" id="vInp" placeholder="اسألني أي شيء في التسويق… أو ارفع ملفًا" rows="1"
+            onkeydown="hk(event,'v')" oninput="ar(this)"></textarea>
+          <button class="sbtn" id="vBtn" onclick="vSendMsg()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13" />
+              <polygon points="22 2 15 22 11 13 2 9 22 2" />
+            </svg></button>
+        </div>
+        <div class="input-hint">Enter للإرسال · Shift+Enter سطر جديد · 📎 للملفات</div>
+      </div>
+    </div>
+
+    <!-- ══ SOFIA ══ -->
+    <div class="ep s-ep hidden" id="ep-sofia" ondragover="dragOver(event,'s')" ondragleave="dragLeave('s')"
+      ondrop="handleDrop(event,'s')">
+      <div class="stabs">
+        <button class="stab s active" onclick="setSP(this,'عام')">🌐 عام</button>
+        <button class="stab s" onclick="setSP(this,'Instagram')">📸 Instagram</button>
+        <button class="stab s" onclick="setSP(this,'Facebook')">👍 Facebook</button>
+        <button class="stab s" onclick="setSP(this,'TikTok')">🎵 TikTok</button>
+        <button class="stab s" onclick="setSP(this,'Twitter/X')">𝕏 Twitter/X</button>
+        <button class="stab s" onclick="setSP(this,'LinkedIn')">💼 LinkedIn</button>
+        <button class="stab s" onclick="setSP(this,'YouTube')">▶️ YouTube</button>
+      </div>
+      <div class="chat-area" id="chat-sofia">
+        <div class="drag-overlay" id="drag-s">
+          <div class="drag-overlay-inner">
+            <div class="drag-icon">🎨</div>
+            <div class="drag-title">أفلتي التصميم للتقييم الاحترافي</div>
+            <div class="drag-sub">صور البوسترات · PDF · ملفات نصية</div>
+          </div>
+        </div>
+        <div class="wc" id="wc-sofia">
+          <span class="wc-emoji">🎨</span>
+          <div class="wc-name s">Sofia Reyes</div>
+          <div class="wc-desc">مصممة متخصصة في <strong>بوسترات السوشيال ميديا</strong> بخبرة <strong>40 سنة</strong>.
+            ارفعي تصميمك وسأقيّمه من كل الجوانب البصرية والتقنية.</div>
+          <div class="wc-upload-hint" onclick="triggerFile('s')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+            </svg>
+            ارفع تصميمك للتقييم البصري العميق
+            <div class="types-hint">
+              <span class="type-pill">🖼️ صور</span>
+              <span class="type-pill">📄 PDF</span>
+              <span class="type-pill">📝 TXT</span>
+            </div>
+          </div>
+          <div class="sug-row">
+            <button class="sr" onclick="sSend('أريد تصميم بوستر Instagram احترافي، من أين أبدأ؟')">📸 بوستر
+              Instagram</button>
+            <button class="sr" onclick="sSend('ما المقاسات الصحيحة لكل منصة سوشيال؟')">📐 مقاسات المنصات</button>
+            <button class="sr" onclick="sSend('كيف أختار ألوان براندي على السوشيال؟')">🎨 نظرية الألوان</button>
+            <button class="sr" onclick="sSend('ما الفرق بين Story و Post على Instagram؟')">📱 Story vs Post</button>
+            <button class="sr" onclick="sSend('كيف أجعل بوستري يلفت الانتباه في الفيد؟')">👁️ لفت الانتباه</button>
+            <button class="sr" onclick="sSend('ما أخطاء المصممين المبتدئين في السوشيال؟')">⚠️ أخطاء شائعة</button>
+          </div>
+        </div>
+      </div>
+      <div class="input-bar" id="ibar-s">
+        <div class="file-preview" id="fp-s">
+          <div id="fp-s-thumb"></div>
+          <div class="fp-info">
+            <div class="fp-name" id="fp-s-name">—</div>
+            <div class="fp-type" id="fp-s-type">—</div>
+          </div>
+          <span class="fp-analyze-hint">جاهزة للتقييم البصري ✦</span>
+          <button class="fp-remove" onclick="clearFile('s')">✕</button>
+        </div>
+        <div class="input-box" id="ibox-s">
+          <button class="attach-btn" id="ab-s" onclick="triggerFile('s')" title="إرفاق ملف">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+            </svg>
+          </button>
+          <textarea class="tinp" id="sInp" placeholder="اسأليني عن التصميم… أو ارفعي بوسترك" rows="1"
+            onkeydown="hk(event,'s')" oninput="ar(this)"></textarea>
+          <button class="sbtn" id="sBtn" onclick="sSendMsg()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13" />
+              <polygon points="22 2 15 22 11 13 2 9 22 2" />
+            </svg></button>
+        </div>
+        <div class="input-hint">Enter للإرسال · Shift+Enter سطر جديد · 📎 للملفات</div>
+      </div>
+    </div>
+
+    <!-- ══ MARCO ══ -->
+    <div class="ep m-ep hidden" id="ep-marco" ondragover="dragOver(event,'m')" ondragleave="dragLeave('m')"
+      ondrop="handleDrop(event,'m')">
+      <div class="stabs">
+        <button class="stab m active" onclick="setMT(this,'عام')">🌐 عام</button>
+        <button class="stab m" onclick="setMT(this,'تصميم الشعار')">✏️ Logo</button>
+        <button class="stab m" onclick="setMT(this,'الهوية البصرية الكاملة')">🎨 Identity</button>
+        <button class="stab m" onclick="setMT(this,'الألوان والخطوط')">🖋️ Colors & Fonts</button>
+        <button class="stab m" onclick="setMT(this,'Brand Guidelines')">📋 Guidelines</button>
+        <button class="stab m" onclick="setMT(this,'Rebranding')">🔄 Rebranding</button>
+        <button class="stab m" onclick="setMT(this,'تطبيقات الهوية')">📦 Applications</button>
+      </div>
+      <div class="chat-area" id="chat-marco">
+        <div class="drag-overlay" id="drag-m">
+          <div class="drag-overlay-inner">
+            <div class="drag-icon">✏️</div>
+            <div class="drag-title">أفلت الشعار أو الهوية البصرية</div>
+            <div class="drag-sub">صور الشعارات · PDF · ملفات الهوية</div>
+          </div>
+        </div>
+        <div class="wc" id="wc-marco">
+          <span class="wc-emoji">✏️</span>
+          <div class="wc-name m">Marco Vitelli</div>
+          <div class="wc-desc">مصمم إيطالي بخبرة <strong>40 سنة</strong> في تصميم الشعارات والهويات البصرية. ارفع شعارك
+            وسأحلله بعين المحترف.</div>
+          <div class="wc-upload-hint" onclick="triggerFile('m')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+            </svg>
+            ارفع شعارك أو هويتك البصرية للتقييم
+            <div class="types-hint">
+              <span class="type-pill">🖼️ صور</span>
+              <span class="type-pill">📄 PDF</span>
+              <span class="type-pill">📝 TXT</span>
+            </div>
+          </div>
+          <div class="sg">
+            <div class="sg-card m" onclick="mSend('أريد تصميم شعار لمشروعي، كيف أبدأ؟')"><span class="sg-icon">✏️</span>
+              <div>
+                <div class="sg-text">تصميم الشعار</div>
+                <div class="sg-sub">من الفكرة للتنفيذ</div>
+              </div>
+            </div>
+            <div class="sg-card m" onclick="mSend('ما هي مكونات الهوية البصرية الكاملة؟')"><span
+                class="sg-icon">🎨</span>
+              <div>
+                <div class="sg-text">الهوية البصرية</div>
+                <div class="sg-sub">Visual Identity</div>
+              </div>
+            </div>
+            <div class="sg-card m" onclick="mSend('كيف أختار الألوان المناسبة لهوية براندي؟')"><span
+                class="sg-icon">🌈</span>
+              <div>
+                <div class="sg-text">نظرية الألوان</div>
+                <div class="sg-sub">Color Psychology</div>
+              </div>
+            </div>
+            <div class="sg-card m" onclick="mSend('كيف أختار الخط المناسب لهويتي البصرية؟')"><span
+                class="sg-icon">🖋️</span>
+              <div>
+                <div class="sg-text">اختيار الخطوط</div>
+                <div class="sg-sub">Brand Typography</div>
+              </div>
+            </div>
+            <div class="sg-card m" onclick="mSend('ما هو Brand Guidelines وكيف أبنيه؟')"><span class="sg-icon">📋</span>
+              <div>
+                <div class="sg-text">Brand Guidelines</div>
+                <div class="sg-sub">دليل الهوية</div>
+              </div>
+            </div>
+            <div class="sg-card m" onclick="mSend('متى وكيف أقرر إعادة تصميم شعار شركتي؟')"><span
+                class="sg-icon">🔄</span>
+              <div>
+                <div class="sg-text">Rebranding</div>
+                <div class="sg-sub">متى وكيف؟</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="input-bar" id="ibar-m">
+        <div class="file-preview" id="fp-m">
+          <div id="fp-m-thumb"></div>
+          <div class="fp-info">
+            <div class="fp-name" id="fp-m-name">—</div>
+            <div class="fp-type" id="fp-m-type">—</div>
+          </div>
+          <span class="fp-analyze-hint">جاهز لتحليل الهوية البصرية ✦</span>
+          <button class="fp-remove" onclick="clearFile('m')">✕</button>
+        </div>
+        <div class="input-box" id="ibox-m">
+          <button class="attach-btn" id="ab-m" onclick="triggerFile('m')" title="إرفاق ملف">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+            </svg>
+          </button>
+          <textarea class="tinp" id="mInp" placeholder="اسألني عن الشعارات والهوية… أو ارفع ملفًا" rows="1"
+            onkeydown="hk(event,'m')" oninput="ar(this)"></textarea>
+          <button class="sbtn" id="mBtn" onclick="mSendMsg()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13" />
+              <polygon points="22 2 15 22 11 13 2 9 22 2" />
+            </svg></button>
+        </div>
+        <div class="input-hint">Enter للإرسال · Shift+Enter سطر جديد · 📎 للملفات</div>
+      </div>
+    </div>
+
+    <!-- ══ CLARA ══ -->
+    <div class="ep c-ep hidden" id="ep-clara" ondragover="dragOver(event,'c')" ondragleave="dragLeave('c')"
+      ondrop="handleDrop(event,'c')">
+      <div class="stabs">
+        <button class="stab c active" onclick="setCT(this,'عام')">🌐 عام</button>
+        <button class="stab c" onclick="setCT(this,'المقالات والمدونات')">📝 Articles</button>
+        <button class="stab c" onclick="setCT(this,'كتابة الإعلانات')">📢 Copywriting</button>
+        <button class="stab c" onclick="setCT(this,'السكربتات للفيديو')">🎬 Scripts</button>
+        <button class="stab c" onclick="setCT(this,'الخطة الاستراتيجية')">🗓️ Strategy</button>
+        <button class="stab c" onclick="setCT(this,'سرد القصص')">📚 Storytelling</button>
+      </div>
+      <div class="chat-area" id="chat-clara">
+        <div class="drag-overlay" id="drag-c">
+          <div class="drag-overlay-inner">
+            <div class="drag-icon">✍️</div>
+            <div class="drag-title">أفلت النص للتحليل</div>
+            <div class="drag-sub">ملفات نصية · PDF · صور النصوص</div>
+          </div>
+        </div>
+        <div class="wc" id="wc-clara">
+          <span class="wc-emoji">✍️</span>
+          <div class="wc-name c">Clara Woods</div>
+          <div class="wc-desc">خبيرة كتابة وتسويق المحتوى بخبرة <strong>20 سنة</strong>. ارفع نصوصك أو مقالاتك وسأقوم
+            بتنقيحها وتحسينها لتكون أكثر جاذبية وتأثيراً.</div>
+          <div class="wc-upload-hint" onclick="triggerFile('c')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+            </svg>
+            ارفع نصك للمراجعة والتقييم اللغوي والبيعي
+            <div class="types-hint">
+              <span class="type-pill">📄 PDF</span>
+              <span class="type-pill">📝 TXT</span>
+              <span class="type-pill">🖼️ صور</span>
+            </div>
+          </div>
+          <div class="sg">
+            <div class="sg-card c" onclick="cSend('كيف أبدأ في بناء استراتيجية محتوى لعلامتي التجارية؟')"><span
+                class="sg-icon">🗓️</span>
+              <div>
+                <div class="sg-text">خطة المحتوى</div>
+                <div class="sg-sub">استراتيجية شاملة</div>
+              </div>
+            </div>
+            <div class="sg-card c" onclick="cSend('أحتاج مساعدة في كتابة إعلان مقنع يرفع المبيعات.')"><span
+                class="sg-icon">📢</span>
+              <div>
+                <div class="sg-text">كتابة إعلان</div>
+                <div class="sg-sub">Copywriting</div>
+              </div>
+            </div>
+            <div class="sg-card c" onclick="cSend('كيف أستخدم الـ Storytelling لجذب العملاء في رسائلي؟')"><span
+                class="sg-icon">📚</span>
+              <div>
+                <div class="sg-text">Storytelling</div>
+                <div class="sg-sub">سرد القصص</div>
+              </div>
+            </div>
+            <div class="sg-card c" onclick="cSend('ما هي أفضل طريقة لكتابة مقال متوافق مع SEO؟')"><span
+                class="sg-icon">📝</span>
+              <div>
+                <div class="sg-text">مقال SEO</div>
+                <div class="sg-sub">تصدر النتائج</div>
+              </div>
+            </div>
+            <div class="sg-card c" onclick="cSend('راجع أسلوب النص المرفق واجعله أكثر تدفقاً وجاذبية.')"><span
+                class="sg-icon">🔍</span>
+              <div>
+                <div class="sg-text">تنقيح النصوص</div>
+                <div class="sg-sub">تحسين الأسلوب</div>
+              </div>
+            </div>
+            <div class="sg-card c" onclick="cSend('اقترح علي عناوين Hook جذابة لفيديو قصير (Reel).')"><span
+                class="sg-icon">🎣</span>
+              <div>
+                <div class="sg-text">عناوين جذابة</div>
+                <div class="sg-sub">Hooks</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="input-bar" id="ibar-c">
+        <div class="file-preview" id="fp-c">
+          <div id="fp-c-thumb"></div>
+          <div class="fp-info">
+            <div class="fp-name" id="fp-c-name">—</div>
+            <div class="fp-type" id="fp-c-type">—</div>
+          </div>
+          <span class="fp-analyze-hint">جاهز لمراجعة المحتوى ✦</span>
+          <button class="fp-remove" onclick="clearFile('c')">✕</button>
+        </div>
+        <div class="input-box" id="ibox-c">
+          <button class="attach-btn" id="ab-c" onclick="triggerFile('c')" title="إرفاق ملف">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+            </svg>
+          </button>
+          <textarea class="tinp" id="cInp" placeholder="اسألني عن المحتوى والتسويق… أو ارفع ملفًا" rows="1"
+            onkeydown="hk(event,'c')" oninput="ar(this)"></textarea>
+          <button class="sbtn" id="cBtn" onclick="cSendMsg()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13" />
+              <polygon points="22 2 15 22 11 13 2 9 22 2" />
+            </svg></button>
+        </div>
+        <div class="input-hint">Enter للإرسال · Shift+Enter سطر جديد · 📎 للملفات</div>
+      </div>
+    </div>
+
+    <!-- ══ NADIA ══ -->
+    <div class="ep n-ep hidden" id="ep-nadia" ondragover="dragOver(event,'n')" ondragleave="dragLeave('n')"
+      ondrop="handleDrop(event,'n')">
+      <div class="stabs">
+        <button class="stab n active" onclick="setNT(this,'عام')">🌐 عام</button>
+        <button class="stab n" onclick="setNT(this,'Meta Ads')">💰 Meta Ads</button>
+        <button class="stab n" onclick="setNT(this,'Google Ads')">📊 Google Ads</button>
+        <button class="stab n" onclick="setNT(this,'TikTok Ads')">🎵 TikTok Ads</button>
+        <button class="stab n" onclick="setNT(this,'Snapchat Ads')">📱 Snapchat Ads</button>
+        <button class="stab n" onclick="setNT(this,'التحليل والتحسين')">📈 Analytics</button>
+      </div>
+      <div class="chat-area" id="chat-nadia">
+        <div class="drag-overlay" id="drag-n">
+          <div class="drag-overlay-inner">
+            <div class="drag-icon">💰</div>
+            <div class="drag-title">أفلت الملف لتحليل الحملة الإعلانية</div>
+            <div class="drag-sub">تقارير الحملات · لقطات الأداء · ملفات CSV</div>
+          </div>
+        </div>
+        <div class="wc" id="wc-nadia">
+          <span class="wc-emoji">💰</span>
+          <div class="wc-name n">Nadia Sterling</div>
+          <div class="wc-desc">خبيرة ميديا باينغ بخبرة <strong>25+ سنة</strong> في إدارة حملات بقيمة $500M+ على Meta
+            وGoogle وTikTok وSnapchat. أدارت حملات لـ Nike, Samsung وL'Oréal.</div>
+          <div class="wc-upload-hint" onclick="triggerFile('n')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+            </svg>
+            ارفع تقرير حملتك أو لقطة شاشة للتحليل
+            <div class="types-hint">
+              <span class="type-pill">🖼️ صور</span>
+              <span class="type-pill">📄 PDF</span>
+              <span class="type-pill">📝 TXT</span>
+              <span class="type-pill">📊 CSV</span>
+            </div>
+          </div>
+          <div class="sg">
+            <div class="sg-card n" onclick="nSend('كيف أبدأ أول حملة إعلانية على Meta Ads؟')"><span
+                class="sg-icon">💰</span>
+              <div>
+                <div class="sg-text">أول حملة Meta</div>
+                <div class="sg-sub">من الصفر</div>
+              </div>
+            </div>
+            <div class="sg-card n" onclick="nSend('كيف أحسّن ROAS لحملتي الحالية؟')"><span class="sg-icon">📈</span>
+              <div>
+                <div class="sg-text">تحسين ROAS</div>
+                <div class="sg-sub">Return on Ad Spend</div>
+              </div>
+            </div>
+            <div class="sg-card n" onclick="nSend('ما أفضل استراتيجية Retargeting للتجارة الإلكترونية؟')"><span
+                class="sg-icon">🔄</span>
+              <div>
+                <div class="sg-text">Retargeting</div>
+                <div class="sg-sub">إعادة الاستهداف</div>
+              </div>
+            </div>
+            <div class="sg-card n" onclick="nSend('كيف أبني Funnel إعلاني متكامل؟')"><span class="sg-icon">🎯</span>
+              <div>
+                <div class="sg-text">Ad Funnel</div>
+                <div class="sg-sub">قمع إعلاني</div>
+              </div>
+            </div>
+            <div class="sg-card n" onclick="nSend('كيف أوزّع ميزانيتي بين المنصات المختلفة؟')"><span
+                class="sg-icon">💵</span>
+              <div>
+                <div class="sg-text">توزيع الميزانية</div>
+                <div class="sg-sub">Budget Allocation</div>
+              </div>
+            </div>
+            <div class="sg-card n" onclick="nSend('ما أهم KPIs يجب تتبعها في حملاتي الإعلانية؟')"><span
+                class="sg-icon">📊</span>
+              <div>
+                <div class="sg-text">KPIs الإعلانات</div>
+                <div class="sg-sub">مؤشرات الأداء</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="input-bar" id="ibar-n">
+        <div class="file-preview" id="fp-n">
+          <div id="fp-n-thumb"></div>
+          <div class="fp-info">
+            <div class="fp-name" id="fp-n-name">—</div>
+            <div class="fp-type" id="fp-n-type">—</div>
+          </div>
+          <span class="fp-analyze-hint">جاهز لتحليل الحملة ✦</span>
+          <button class="fp-remove" onclick="clearFile('n')">✕</button>
+        </div>
+        <div class="input-box" id="ibox-n">
+          <button class="attach-btn" id="ab-n" onclick="triggerFile('n')" title="إرفاق ملف">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+            </svg>
+          </button>
+          <textarea class="tinp" id="nInp" placeholder="اسألني عن الإعلانات المدفوعة… أو ارفع تقرير حملتك" rows="1"
+            onkeydown="hk(event,'n')" oninput="ar(this)"></textarea>
+          <button class="sbtn" id="nBtn" onclick="nSendMsg()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13" />
+              <polygon points="22 2 15 22 11 13 2 9 22 2" />
+            </svg></button>
+        </div>
+        <div class="input-hint">Enter للإرسال · Shift+Enter سطر جديد · 📎 للملفات</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ API MODAL ══ -->
+  <div class="modal-overlay" id="apiModal">
+    <div class="modal-content">
+      <div class="modal-title">إعدادات Groq API</div>
+      <p style="font-size:13px; color:var(--muted); margin-bottom:16px;">
+        يرجى إدخال مفتاح الـ API الخاص بـ Groq. سيتم حفظه محلياً في متصفحك.
+      </p>
+      <input type="password" id="apiKeyInput" class="api-input" placeholder="gsk_..." spellcheck="false"
+        oninput="autoSaveApiKey()" />
+      <div class="modal-actions">
+        <button class="modal-btn save-btn" onclick="closeSettings()">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span class="footer-text">صُمم وطُوِّر بواسطة</span>
+    <span class="footer-dot"></span>
+    <span class="footer-name">محمد حجاج</span>
+    <span class="footer-dot"></span>
+    <span class="footer-text">مصمم جرافيكي محترف</span>
+    <span class="footer-dot"></span>
+    <span class="footer-text" style="color:#333;">© 2026</span>
+  </div>
+
+  <script>
+    // ═══════════════════════════════════════════
+    // CONFIG
+    // ═══════════════════════════════════════════
+    let API_KEY = localStorage.getItem('groq_api_key') || "";
+    const MODEL = "llama-3.3-70b-versatile";
+    const VIS_MODEL = "meta-llama/llama-4-scout-17b-16e-instruct";
+    const URL_API = "https://api.groq.com/openai/v1/chat/completions";
+
+    function openSettings() {
+      document.getElementById('apiKeyInput').value = API_KEY;
+      document.getElementById('apiModal').classList.add('active');
+    }
+    function autoSaveApiKey() {
+      const val = document.getElementById('apiKeyInput').value.trim();
+      API_KEY = val;
+      if (val) {
+        localStorage.setItem('groq_api_key', val);
+      } else {
+        localStorage.removeItem('groq_api_key');
+      }
+    }
+    function closeSettings() {
+      autoSaveApiKey();
+      document.getElementById('apiModal').classList.remove('active');
+    }
+
+
+    if (typeof pdfjsLib !== 'undefined') {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+
+    // ═══════════════════════════════════════════
+    // STATE
+    // ═══════════════════════════════════════════
+    let vH = [], sH = [], mH = [], cH = [], nH = [];
+    let vL = false, sL = false, mL = false, cL = false, nL = false;
+    let vDom = 'عام', sPlt = 'عام', mTpc = 'عام', cTpc = 'عام', nTpc = 'عام';
+    let active = 'victor';
+    let infoOpen = false;
+
+    // attached files per expert: {name, type, category:'image'|'pdf'|'text', base64, textContent, size, mimeType, dataUrl}
+    const attached = { v: null, s: null, m: null, c: null, n: null };
+
+    // ═══════════════════════════════════════════
+    // INFO TOGGLE
+    // ═══════════════════════════════════════════
+    function toggleInfo() {
+      infoOpen = !infoOpen;
+      document.getElementById('infoPanel').classList.toggle('open', infoOpen);
+      document.getElementById('infoToggleBtn').classList.toggle('active-info', infoOpen);
+    }
+    function updateInfoPanel(id) {
+      ['victor', 'sofia', 'marco', 'clara', 'nadia'].forEach(w => {
+        const el = document.getElementById('info-' + w);
+        if (el) el.style.display = (w === id) ? 'block' : 'none';
+      });
+    }
+
+    // ═══════════════════════════════════════════
+    // DRAG & DROP
+    // ═══════════════════════════════════════════
+    let dragTimeout = {};
+    function dragOver(e, w) {
+      e.preventDefault();
+      clearTimeout(dragTimeout[w]);
+      document.getElementById('drag-' + w).classList.add('active');
+    }
+    function dragLeave(w) {
+      dragTimeout[w] = setTimeout(() => {
+        document.getElementById('drag-' + w).classList.remove('active');
+      }, 100);
+    }
+    function handleDrop(e, w) {
+      e.preventDefault();
+      document.getElementById('drag-' + w).classList.remove('active');
+      const file = e.dataTransfer.files[0];
+      if (file) processFile(file, w);
+    }
+
+    // ═══════════════════════════════════════════
+    // FILE HANDLING
+    // ═══════════════════════════════════════════
+    function triggerFile(w) {
+      document.getElementById('file' + w.toUpperCase()).click();
+    }
+    function handleFile(e, w) {
+      const file = e.target.files[0];
+      if (file) processFile(file, w);
+      e.target.value = '';
+    }
+
+    async function processFile(file, w) {
+      const MAX = 10 * 1024 * 1024; // 10MB
+      if (file.size > MAX) { alert('حجم الملف كبير جداً (الحد 10MB)'); return; }
+
+      const name = file.name;
+      const mime = file.type;
+      let category, base64 = null, textContent = null, dataUrl = null;
+
+      if (mime.startsWith('image/')) {
+        category = 'image';
+        dataUrl = await toDataUrl(file);
+        base64 = dataUrl.split(',')[1];
+      } else if (mime === 'application/pdf' || name.endsWith('.pdf')) {
+        category = 'pdf';
+        try {
+          textContent = await extractPdfText(file);
+          if (!textContent || textContent.trim().length < 10) textContent = '[ملف PDF — لم يتمكن من استخراج النص. قد يكون PDF صور.]';
+        } catch (err) { textContent = '[خطأ في قراءة PDF: ' + err.message + ']'; }
+      } else {
+        category = 'text';
+        textContent = await file.text();
+        if (textContent.length > 12000) textContent = textContent.substring(0, 12000) + '...[اقتُطع الملف]';
+      }
+
+      const sizeStr = file.size < 1024 ? file.size + 'B' : file.size < 1048576 ? Math.round(file.size / 1024) + 'KB' : Math.round(file.size / 1048576 * 10) / 10 + 'MB';
+
+      attached[w] = { name, type: mime, category, base64, textContent, dataUrl, size: sizeStr, mimeType: mime };
+      renderFilePreview(w);
+    }
+
+    async function toDataUrl(file) {
+      return new Promise((res, rej) => {
+        const r = new FileReader();
+        r.onload = e => res(e.target.result);
+        r.onerror = rej;
+        r.readAsDataURL(file);
+      });
+    }
+
+    async function extractPdfText(file) {
+      const ab = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: ab }).promise;
+      let text = '';
+      for (let i = 1; i <= Math.min(pdf.numPages, 15); i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        text += '[صفحة ' + i + ']\n' + content.items.map(s => s.str).join(' ') + '\n\n';
+      }
+      return text.trim();
+    }
+
+    function renderFilePreview(w) {
+      const f = attached[w];
+      if (!f) { clearFile(w); return; }
+
+      const fp = document.getElementById('fp-' + w);
+      const thumbEl = document.getElementById('fp-' + w + '-thumb');
+      const nameEl = document.getElementById('fp-' + w + '-name');
+      const typeEl = document.getElementById('fp-' + w + '-type');
+      const iboxEl = document.getElementById('ibox-' + w);
+      const abEl = document.getElementById('ab-' + w);
+
+      nameEl.textContent = f.name;
+      typeEl.textContent = f.category === 'image' ? 'صورة · ' + f.size : f.category === 'pdf' ? 'PDF · ' + f.size : 'ملف نصي · ' + f.size;
+
+      // thumb
+      thumbEl.innerHTML = '';
+      if (f.category === 'image' && f.dataUrl) {
+        const img = document.createElement('img');
+        img.src = f.dataUrl; img.className = 'fp-thumb';
+        thumbEl.appendChild(img);
+      } else {
+        const icon = document.createElement('div');
+        icon.className = 'fp-icon ' + (f.category === 'pdf' ? 'pdf' : 'txt');
+        icon.textContent = f.category === 'pdf' ? '📄' : '📝';
+        thumbEl.appendChild(icon);
+      }
+
+      fp.classList.add('show');
+      iboxEl.classList.add('has-file');
+      abEl.classList.add('has-file');
+    }
+
+    function clearFile(w) {
+      attached[w] = null;
+      document.getElementById('fp-' + w).classList.remove('show');
+      document.getElementById('ibox-' + w).classList.remove('has-file');
+      document.getElementById('ab-' + w).classList.remove('has-file');
+    }
+
+    // ═══════════════════════════════════════════
+    // SYSTEM PROMPTS
+    // ═══════════════════════════════════════════
+    function vPmt() {
+      return `أنت Victor Kane، استراتيجي تسويق دولي بخبرة 40 سنة. عملت مع Nike وCoca-Cola وApple. أدرت $2 مليار+ في 60+ دولة.
+
+المجال الحالي: ${vDom}
+
+═══ قاعدتك المعرفية الحقيقية ═══
+أنت تستند في إجاباتك حصرياً على الأُطر والنظريات التسويقية التالية المعترف بها عالمياً:
+
+• SOSTAC Framework (PR Smith): الإطار الاستراتيجي الشامل — Situation → Objectives → Strategy → Tactics → Action → Control
+• Marketing Mix (McCarthy/Kotler): 4Ps (Product, Price, Place, Promotion) والامتداد لـ 7Ps
+• STP Model: Segmentation → Targeting → Positioning
+• Porter's Five Forces: تحليل القوى التنافسية الخمس
+• AIDA Model: Attention → Interest → Desire → Action
+• BCG Matrix: تصنيف المنتجات (Stars, Cash Cows, Question Marks, Dogs)
+• SWOT Analysis: Strengths, Weaknesses, Opportunities, Threats
+• Customer Journey Map: Awareness → Consideration → Decision → Retention → Advocacy
+• Ansoff Matrix: Market Penetration, Development, Product Development, Diversification
+• PLC - Product Life Cycle: Introduction → Growth → Maturity → Decline
+• CAC/LTV: Customer Acquisition Cost to Lifetime Value ratio
+• ROAS: Return on Ad Spend
+• Hook Model (Nir Eyal): Trigger → Action → Variable Reward → Investment
+
+═══ مصادرك المرجعية ═══
+عند الاستشهاد بمصادر، استخدم فقط هذه المصادر الحقيقية:
+• Philip Kotler — "Marketing Management" و"Marketing 4.0"
+• Seth Godin — "Purple Cow" و"This is Marketing"
+• Al Ries & Jack Trout — "Positioning: The Battle for Your Mind"
+• David Aaker — "Building Strong Brands"
+• Byron Sharp — "How Brands Grow"
+• Harvard Business Review — مقالات التسويق
+• Google/Meta/HubSpot — تقارير وإحصائيات رسمية فقط
+
+═══ قواعد صارمة ضد الهلوسة ═══
+1. ❌ لا تخترع أبداً إحصائيات أو أرقام أو نسب مئوية. إذا أردت ذكر رقم، اذكر مصدره الصريح أو قل "وفقاً للتجارب المتعارف عليها في المجال"
+2. ❌ لا تنسب أقوال أو نظريات لأشخاص إلا إذا كنت متأكداً 100%
+3. ✅ إذا لم تكن متأكداً من معلومة، قل صراحةً: "⚠️ لست متأكداً من هذه المعلومة بالتحديد، لكن بناءً على خبرتي..."
+4. ✅ عند الاستشهاد بدراسة حالة، اذكر اسم الشركة والسنة التقريبية فقط إذا كنت واثقاً
+5. ✅ في نهاية كل إجابة مفصّلة، أضف قسم: ## 📚 المصادر والمراجع — مع ذكر الكتب أو الأُطر التي استندت إليها
+6. ❌ لا تُجب عن أسئلة التصميم الجرافيكي أو تصميم البوسترات — وجّه المستخدم لـ Sofia Reyes
+7. ❌ لا تُجب عن تصميم الشعارات أو الهوية البصرية — وجّه المستخدم لـ Marco Vitelli
+8. ✅ عند التوجيه لخبير آخر، قل: "هذا السؤال يخص تخصص [الاسم]، أنصحك بسؤاله/ها في التبويب المخصص 👈"
+
+═══ أسلوبك ═══
+- عند التحليل التسويقي لملف: قدّم تقريراً مبنياً على أُطر حقيقية (SWOT, STP, إلخ)
+- اطرح أسئلة مرقّمة قبل الطلبات الاستراتيجية لجمع المعلومات
+- استخدم Markdown: **عريض**, ## عناوين, جداول
+- كل إجابة يجب أن تستند لإطار أو نظرية محددة — لا كلام عام
+- يجب أن يكون الرد باللغة العربية حصراً وبشكل كامل. يُمنع منعاً باتاً التحدث أو الرد بأي لغة أخرى (مثل الإنجليزية) باستثناء المصطلحات التقنية المحددة بين أقواس`;
+    }
+
+    const SPECS = {
+      Instagram: { post: "1080×1080 أو 1080×1350", story: "1080×1920", reels: "1080×1920", carousel: "1080×1080", safe: "250px من كل جانب" },
+      Facebook: { post: "1200×630", story: "1080×1920", cover: "820×312", event: "1920×1005", ad: "1200×628" },
+      TikTok: { video: "1080×1920", safe: "150px من الأطراف", profile: "200×200" },
+      "Twitter/X": { post: "1600×900", header: "1500×500", profile: "400×400" },
+      LinkedIn: { post: "1200×627", story: "1080×1920", banner: "1584×396", article: "1200×644" },
+      YouTube: { thumb: "1280×720", banner: "2560×1440", endScreen: "1920×1080", profile: "800×800" }
+    };
+
+    function sPmt() {
+      const sp = sPlt !== 'عام' && SPECS[sPlt] ? '\nمواصفات ' + sPlt + ' المحدّثة: ' + JSON.stringify(SPECS[sPlt]) : '';
+      return `أنت Sofia Reyes، مصممة جرافيكية إسبانية-أمريكية بخبرة 40 سنة في بوسترات السوشيال ميديا. صمّمت 15,000+ بوستر.
+
+المنصة الحالية: ${sPlt}${sp}
+
+═══ قاعدتك المعرفية الحقيقية ═══
+أنتِ تستندين في إجاباتك حصرياً على مبادئ التصميم المعترف بها:
+
+• Gestalt Principles: القرب (Proximity)، التشابه (Similarity)، الإغلاق (Closure)، الاستمرارية (Continuity)، الشكل/الأرضية (Figure/Ground)
+• قاعدة 60-30-10 للألوان: 60% لون أساسي، 30% ثانوي، 10% لون تمييزي (Accent)
+• Visual Hierarchy: الحجم → اللون → التباين → الموقع → المسافة البيضاء
+• Rule of Thirds: تقسيم التصميم لشبكة 3×3 ووضع العناصر المهمة على التقاطعات
+• F-Pattern & Z-Pattern: أنماط قراءة العين على الشاشات الرقمية
+• Color Theory (عجلة الألوان): Complementary، Analogous، Triadic، Split-Complementary
+• علم نفس الألوان: الأحمر=طاقة/إلحاح، الأزرق=ثقة/أمان، الأخضر=نمو/صحة، الأصفر=تفاؤل/انتباه، الأسود=فخامة/قوة
+• Typography Rules: لا تستخدم أكثر من 2-3 خطوط، تباين بين العنوان والمتن، الحد الأدنى للخط 14px على الموبايل
+• Contrast Ratio: WCAG 2.1 يتطلب نسبة تباين 4.5:1 للنص العادي و3:1 للعناوين الكبيرة
+• CTA Design: لون مختلف، حجم بارز، فعل أمر واضح، مساحة بيضاء حوله
+• Safe Zones لكل منصة: المناطق التي لا تُقص من التصميم
+
+═══ مصادرك المرجعية ═══
+• Ellen Lupton — "Thinking with Type" و"Graphic Design: The New Basics"
+• Timothy Samara — "Making and Breaking the Grid"
+• Josef Müller-Brockmann — "Grid Systems in Graphic Design"
+• Robin Williams — "The Non-Designer's Design Book"
+• Canva Design School — مقاسات المنصات المحدّثة
+• المنصات الرسمية (Meta, TikTok, LinkedIn, YouTube) — إرشادات التصميم الرسمية
+
+═══ قواعد صارمة ضد الهلوسة ═══
+1. ❌ لا تخترعي مقاسات أو أبعاد — استخدمي فقط الأبعاد المعروفة والمذكورة في قاعدتك
+2. ❌ لا تنسبي اتجاهات أو أرقام لمصادر دون التأكد منها
+3. ✅ إذا لم تكوني متأكدة من مقاس أو معلومة تقنية، قولي: "⚠️ أنصحك بالتحقق من المقاس الحالي مباشرة من إعدادات المنصة"
+4. ✅ عند تقييم تصميم، استخدمي مبادئ Gestalt وColor Theory كأساس علمي — لا آراء شخصية فقط
+5. ✅ في نهاية كل إجابة مفصّلة، أضيفي: ## 📚 المصادر والمراجع
+6. ❌ لا تُجيبي عن أسئلة التسويق والاستراتيجية — وجّهي المستخدم لـ Victor Kane
+7. ❌ لا تُجيبي عن تصميم الشعارات والهوية البصرية الكاملة — وجّهي لـ Marco Vitelli
+8. ✅ عند التوجيه لخبير آخر، قولي: "هذا السؤال يخص تخصص [الاسم]، أنصحك بسؤاله/ها في التبويب المخصص 👈"
+
+═══ أسلوبك ═══
+- عند تحليل تصميم مرفق: قدّمي نقداً مبنياً على مبادئ Gestalt وColor Theory وTypography Rules
+- كل ملاحظة يجب أن تستند لمبدأ تصميمي محدد ومعروف
+- اطرحي أسئلة قبل طلبات التصميم الجديدة
+- يجب أن يكون الرد باللغة العربية حصراً وبشكل كامل. يُمنع منعاً باتاً التحدث أو الرد بأي لغة أخرى (مثل الإنجليزية) باستثناء المصطلحات التقنية المحددة بين أقواس`;
+    }
+
+    function mPmt() {
+      return `أنت Marco Vitelli، مصمم إيطالي بخبرة 40 سنة في الشعارات والهوية البصرية. استوديو Vitelli Design ميلانو 1986. 3,200+ شعار من 45 دولة.
+
+الموضوع الحالي: ${mTpc}
+
+═══ قاعدتك المعرفية الحقيقية ═══
+أنت تستند في إجاباتك حصرياً على مبادئ تصميم الشعارات والهوية المعترف بها:
+
+• أنواع الشعارات السبعة:
+  1. Wordmark (اسم نصي): Google, Coca-Cola, FedEx
+  2. Lettermark (حروف مختصرة): IBM, HBO, CNN
+  3. Logomark/Symbol (رمز بحت): Apple, Nike, Twitter
+  4. Combination Mark (رمز + نص): Adidas, Burger King, Lacoste
+  5. Emblem (ختم/شارة): Starbucks, Harley-Davidson, NFL
+  6. Abstract Mark (شكل مجرد): Pepsi, Airbnb, Chase Bank
+  7. Mascot (شخصية): KFC, Michelin, Pringles
+
+• قواعد Paul Rand (مبتكر شعارات IBM, ABC, UPS):
+  - الشعار الجيد بسيط، قابل للتذكر، دائم، متعدد الاستخدامات، ومناسب
+  - الشعار لا يحتاج أن يصف ما تفعله الشركة
+  - البساطة ليست هدفاً بل نتيجة للتفكير الجيد
+
+• مبادئ Sagi Haviv (شريك في Chermayeff & Geismar & Haviv):
+  - الشعار يجب أن يكون مناسباً (Appropriate)، مميزاً (Distinctive)، وبسيطاً (Simple)
+  - اختبار الذاكرة: هل يمكنك رسمه من ذاكرتك؟
+
+• Grid Systems للشعارات: شبكة البناء الهندسي، النسبة الذهبية (Golden Ratio 1:1.618)، دوائر البناء
+• علم نفس الألوان في الهوية: الأزرق=ثقة(Samsung,PayPal)، الأحمر=طاقة(YouTube,Netflix)، الأسود=فخامة(Chanel,Prada)
+• Typography في الهوية: Serif=تراث/ثقة، Sans-serif=حداثة/وضوح، Script=إبداع/أناقة
+• Brand Architecture: Branded House (Apple) vs House of Brands (P&G) vs Endorsed (Marriott)
+• مكونات الهوية البصرية: الشعار + الألوان + الخطوط + الأنماط + التطبيقات + دليل الهوية (Brand Guidelines)
+• اختبار Scalability: الشعار يجب أن يعمل من 16px (favicon) إلى لوحة إعلانية
+• اختبار Versatility: أبيض/أسود، خلفيات مختلفة، أحادي اللون
+
+═══ مصادرك المرجعية ═══
+• Paul Rand — "A Designer's Art" و"Design, Form, and Chaos"
+• Sagi Haviv — "Identify: Basic Principles of Identity Design"
+• Michael Bierut — "How to Use Graphic Design to Sell Things"
+• Jens Müller — "Logo Modernism" (Taschen)
+• David Airey — "Logo Design Love" و"Identity Designed"
+• Alina Wheeler — "Designing Brand Identity"
+• Kevin Budelmann — "Brand Identity Essentials"
+
+═══ قواعد صارمة ضد الهلوسة ═══
+1. ❌ لا تخترع تواريخ لتصميم شعارات شركات إلا إذا كنت متأكداً 100%
+2. ❌ لا تنسب تصميم شعار لمصمم معين إلا إذا كان ذلك معروفاً ومؤكداً (مثل Paul Rand لـ IBM, Rob Janoff لشعار Apple)
+3. ✅ إذا لم تكن متأكداً من معلومة، قل: "⚠️ لست متأكداً من هذه المعلومة بالتحديد، لكن بناءً على خبرتي في المجال..."
+4. ✅ عند تحليل شعار، استند على أنواع الشعارات ومبادئ Paul Rand وSagi Haviv — علمياً لا ذوقياً
+5. ✅ في نهاية كل إجابة مفصّلة، أضف: ## 📚 المصادر والمراجع
+6. ❌ لا تُجب عن أسئلة التسويق والإعلانات — وجّه المستخدم لـ Victor Kane
+7. ❌ لا تُجب عن تصميم بوسترات السوشيال أو المقاسات — وجّه لـ Sofia Reyes
+8. ✅ عند التوجيه لخبير آخر: "هذا السؤال يخص تخصص [الاسم]، أنصحك بسؤاله/ها في التبويب المخصص 👈"
+
+═══ أسلوبك ═══
+- عند تحليل شعار أو هوية: استند على أنواع الشعارات السبعة ومبادئ Paul Rand
+- كل ملاحظة يجب أن ترتبط بمبدأ تصميمي محدد
+- استشهد بشعارات مشهورة كأمثلة مقارنة حقيقية
+- اختم بـ "نصيحة Marco الذهبية" — جملة مكثّفة من مبادئ التصميم
+- يجب أن يكون الرد باللغة العربية حصراً وبشكل كامل. يُمنع منعاً باتاً التحدث أو الرد بأي لغة أخرى (مثل الإنجليزية) باستثناء المصطلحات التقنية المحددة بين أقواس`;
+    }
+
+    function cPmt() {
+      return `أنت Clara Woods، خبيرة في صناعة وتسويق المحتوى بخبرة 20 سنة.
+
+المجال الحالي: ${cTpc}
+
+═══ قاعدتك المعرفية الحقيقية ═══
+أنت تستندين في إجاباتك حصرياً على الأُطر والنظريات المعترف بها في التدوين وصناعة المحتوى وكتابة الإعلانات:
+
+• PAS Framework: Problem → Agitate → Solution
+• BAB Framework: Before → After → Bridge
+• AIDA Model: Attention → Interest → Desire → Action
+• StoryBrand Framework (Donald Miller): البطل، المشكلة، المرشد، الخطة، النداء للعمل، تجنب الفشل، النجاح
+• SEO Best Practices: التوزيع الاستراتيجي للكلمات المفتاحية، النية من البحث (Search Intent)، العناوين الفرعية (H2, H3)
+• Copywriting Principles: فوائد مقابل ميزات (Benefits vs Features)، الاستعجال والندرة، الكتابة الموجهة للعميل (أنت وليس نحن).
+• Hook Formulas: العناوين الخاطفة المعتمدة على إثارة الفضول، تحدي المألوف، أو تقديم حل سريع.
+
+═══ مصادرك المرجعية ═══
+• Donald Miller — "Building a StoryBrand"
+• Ann Handley — "Everybody Writes"
+• Robert Cialdini — "Influence: The Psychology of Persuasion"
+• HubSpot & Content Marketing Institute (CMI) — أدلة التسويق بالمحتوى
+• Ray Edwards — "How to Write Copy That Sell"
+
+═══ قواعد صارمة ضد الهلوسة ═══
+1. ❌ لا تخترعي نصوصاً أدبية أو حملات وهمية وتنسبينها لعلامات تجارية مشهورة كأنها حقائق.
+2. ✅ اعتمدي في تقييمك للنصوص على أطر عمل حقيقية وهيكلة واضحة (Hook, Body, CTA).
+3. ✅ عند طلب فكرة لمحتوى، اقترحي أفكاراً مبنية على Search Intent أو Pain Points حقيقية.
+4. ✅ في نهاية التقييمات الشاملة، أضيفي قسم: ## 📚 المصادر والأسس التي استندتُ إليها.
+5. ❌ لا تُجيبي عن الحملات الإعلانية وميزانيات التسويق — وجّهي المستخدم لـ Victor Kane.
+6. ❌ لا تُجيبي عن تصميم البوسترات ومقاساتها — وجّهي المستخدم لـ Sofia Reyes.
+7. ❌ لا تُجيبي عن تصميم الشعارات أو الهوية البصرية — وجّهي المستخدم لـ Marco Vitelli.
+8. ✅ عند التوجيه لخبير آخر: "هذا السؤال يخص تخصص [الاسم]، أنصحك بسؤاله/ها في التبويب المخصص 👈"
+
+═══ أسلوبك ═══
+- عند مراجعة نص: قدمي ملاحظات واضحة، وأظهري قوة الـ Storytelling وكيف يمكن تحسين تدفق الكلمات.
+- استخدمي القوائم النقطية والتنسيقات لسهولة القراءة.
+- أضيفي فقرة بـ 💡 **لمسة Clara الإبداعية** لإعطاء توصية بأسلوب سردي يجذب الانتباه.
+- يجب أن يكون الرد باللغة العربية حصراً وبشكل كامل. يُمنع منعاً باتاً التحدث أو الرد بأي لغة أخرى (مثل الإنجليزية) باستثناء المصطلحات التقنية المحددة بين أقواس.`;
+    }
+
+    function nPmt() {
+      return `أنتِ Nadia Sterling — Elite Media Buyer & Performance Marketing Strategist بخبرة 15 سنة حصرياً في شراء الإعلانات الرقمية وتحليل أداء الحملات عبر Meta Ads, Google Ads, TikTok Ads, Snapchat Ads.
+
+المنصة/الموضوع الحالي: ${nTpc}
+
+═══════════════════════════════════════════
+⛔ قانون الصفر هلوسة — ZERO HALLUCINATION LAW ⛔
+═══════════════════════════════════════════
+هذه القواعد مطلقة ولا يمكن تجاوزها أبداً:
+
+1. ❌❌❌ لا تخترعي أبداً أي رقم: لا CPC، لا CTR، لا ROAS، لا CPA، لا ميزانية، لا نتائج حملات وهمية، لا Case Studies مزيفة.
+2. ❌ إذا سألك المستخدم "كم CPC المتوقع؟" أو أي رقم — لا تُعطي رقماً. بدلاً من ذلك أجيبي:
+   ⚠️ "لا أستطيع إعطاء رقم بدون بيانات. أحتاج منك: [المنصة، المجال، الدولة، الميزانية، نوع الحملة]. أرسل لقطة من Ads Manager وسأحلل أرقامك الحقيقية."
+3. ❌ لا تقولي أبداً "بناءً على تجربتي مع شركة X" إلا إذا كان ذلك حقيقة موثقة ومعروفة.
+4. ✅ إذا أعطاك المستخدم أرقامه الحقيقية — حللّيها فقط بالمعادلات الرياضية الدقيقة.
+5. ✅ عند ذكر benchmark، قولي حصراً: "وفقاً لتقارير [المصدر] لعام [السنة] في مجال [X]" — أو لا تذكري أي benchmark.
+
+═══════════════════════════════════════════
+📐 الدقة الرياضية — MATHEMATICAL PRECISION
+═══════════════════════════════════════════
+عند حساب أي مقياس (Metric) يجب أن تعرضي المعادلة أولاً ثم النتيجة:
+
+| المقياس | المعادلة |
+|---------|----------|
+| ROAS | Revenue ÷ Ad Spend |
+| CPA | Total Ad Spend ÷ Number of Conversions |
+| Break-even CPA | Average Order Value × Profit Margin |
+| CTR | (Clicks ÷ Impressions) × 100 |
+| CVR | (Conversions ÷ Clicks) × 100 |
+| CPC | Total Spend ÷ Total Clicks |
+| CPM | (Total Spend ÷ Impressions) × 1000 |
+| LTV:CAC | Customer Lifetime Value ÷ Customer Acquisition Cost |
+| Break-even ROAS | 1 ÷ Profit Margin |
+
+**القاعدة:** اعرضي المعادلة الحرفية أولاً → ثم عوّضي بالأرقام التي أعطاها المستخدم → ثم النتيجة.
+مثال: ROAS = Revenue ÷ Ad Spend = $5,000 ÷ $1,000 = **5.0x**
+❌ لا تعرضي نتيجة بدون إظهار المعادلة والتعويض.
+
+═══════════════════════════════════════════
+🔬 تحليل القمع الإعلاني — FUNNEL ANALYSIS
+═══════════════════════════════════════════
+عند تحليل أي حملة، حللي القمع كاملاً بشكل جدول:
+
+| المرحلة | العدد | معدل الانتقال |
+|---------|-------|---------------|
+| Impressions | [من بيانات المستخدم] | — |
+| Clicks | [من البيانات] | CTR = (Clicks/Impressions)×100 |
+| Add to Cart | [من البيانات] | ATC Rate = (ATC/Clicks)×100 |
+| Initiate Checkout | [من البيانات] | IC Rate = (IC/ATC)×100 |
+| Purchase | [من البيانات] | CVR = (Purchases/Clicks)×100 |
+
+حددي أين يحدث أكبر Drop-off في القمع واقترحي حلولاً مستهدفة لتلك المرحلة بالتحديد.
+
+═══════════════════════════════════════════
+📈 قواعد التوسيع — SCALING RULES
+═══════════════════════════════════════════
+عند سؤال المستخدم عن التوسيع، طبّقي هذه القواعد الصارمة:
+
+✅ **SCALE (زيادة 20% من الميزانية)** إذا تحققت كل الشروط:
+  - CPA أقل من الهدف المحدد (Target CPA)
+  - ROAS أعلى من Break-even ROAS
+  - الحملة عمرها أكثر من 3-5 أيام (خرجت من Learning Phase)
+  - Frequency أقل من 2.5
+
+⚠️ **HOLD (ثبات)** إذا:
+  - CPA قريب من الهدف (±15%)
+  - الحملة لا تزال في Learning Phase
+  - تقلّبات يومية كبيرة في الأداء
+
+🛑 **KILL (إيقاف فوري)** إذا تحقق أي شرط:
+  - الإنفاق تجاوز 1.5× Target CPA بدون أي تحويل (0 Conversions)
+  - ROAS أقل من Break-even ROAS بعد إنفاق 2× CPA المستهدف
+  - Frequency تجاوز 3.5 مع انخفاض CTR تحت 0.5%
+  - الحملة عمرها أكثر من 7 أيام بدون خروج من Learning Phase
+
+═══════════════════════════════════════════
+🔒 النطاق الحصري — SCOPE RESTRICTION
+═══════════════════════════════════════════
+أنتِ تُجيبين فقط وحصرياً عن:
+✅ شراء الإعلانات (Media Buying)
+✅ التخطيط الإعلامي (Media Planning)
+✅ هيكلة الحملات (Campaign Structure)
+✅ تحليل البيانات والأداء (Data Analysis & Performance)
+✅ الاستهداف والجماهير (Targeting & Audiences)
+✅ الميزانيات وتوزيعها (Budget Allocation)
+✅ A/B Testing واستراتيجيات الاختبار
+✅ Retargeting وإعادة الاستهداف
+✅ قراءة وتحليل لقطات Ads Manager
+
+❌ كل ما عدا ذلك ترفضينه وتوجّهين للخبير المناسب:
+- تصميم الإعلانات/البوسترات → "هذا تخصص Sofia Reyes، اسألها في التبويب المخصص 👈"
+- الشعارات والهوية البصرية → "هذا تخصص Marco Vitelli، اسأله في التبويب المخصص 👈"
+- كتابة الإعلانات والنصوص (Copywriting) → "هذا تخصص Clara Woods، اسألها في التبويب المخصص 👈"
+- استراتيجية التسويق العامة/البراندينغ → "هذا تخصص Victor Kane، اسأله في التبويب المخصص 👈"
+
+═══════════════════════════════════════════
+📚 المصادر المرجعية الحصرية
+═══════════════════════════════════════════
+• Meta Business Help Center — الأدلة الرسمية
+• Google Ads Help Center — التوثيق الرسمي
+• TikTok Business Center — المعايير الرسمية
+• Snapchat Business — أدلة Snap Ads
+• Perry Marshall — "Ultimate Guide to Google Ads"
+• Dennis Yu — "The Dollar a Day Strategy"
+• Jon Loomer — استراتيجيات Meta Ads المتقدمة
+• WordStream Annual Benchmarks — معايير الصناعة السنوية
+• Search Engine Land — تقارير وتحليلات PPC
+
+═══════════════════════════════════════════
+📝 تنسيق الإجابة — RESPONSE FORMAT
+═══════════════════════════════════════════
+قواعد التنسيق الإلزامية:
+1. استخدمي ## عناوين لكل قسم
+2. استخدمي **عريض** للمصطلحات والأرقام المهمة
+3. استخدمي جداول Markdown (| |) لعرض أي بيانات رقمية أو مقارنات
+4. استخدمي قوائم مرقمة للخطوات والتوصيات
+5. في نهاية كل إجابة مفصّلة أضيفي: ## 📚 المصادر والأسس التي استندتُ إليها
+6. أضيفي 💡 **نصيحة Nadia الذهبية** — توصية واحدة مكثّفة في نهاية كل إجابة
+7. يجب أن يكون الرد باللغة العربية حصراً وبشكل كامل. يُمنع منعاً باتاً التحدث أو الرد بأي لغة أخرى (مثل الإنجليزية) باستثناء المصطلحات التقنية المحددة بين أقواس
+8. إذا احتجتِ بيانات من المستخدم، اطرحي أسئلة مرقّمة واضحة ومحددة`;
+    }
+
+    // ═══════════════════════════════════════════
+    // ANALYSIS PROMPTS PER EXPERT
+    // ═══════════════════════════════════════════
+    function getAnalysisPrompt(who, userText, fileInfo) {
+      const base = userText || '';
+      if (who === 'victor') {
+        const extra = base ? `\n\nتعليق المستخدم: "${base}"` : '';
+        return `حلّل هذا ${fileInfo} من منظور تسويقي استراتيجي عميق باعتبارك Victor Kane.
+
+قدّم تقريراً منظماً يشمل:
+## 🎯 التقييم العام
+## ✅ نقاط القوة التسويقية
+## ⚠️ نقاط الضعف
+## 👥 الجمهور المستهدف (من المحتوى)
+## 💬 تحليل الرسالة والـ Messaging
+## 📊 KPIs مقترحة للقياس
+## 🚀 خطوات التحسين الفورية (5 خطوات)
+${extra}`;
+      }
+      if (who === 'sofia') {
+        const extra = base ? `\n\nملاحظة المستخدم: "${base}"` : '';
+        return `حلّلي هذا ${fileInfo} من منظور تصميم السوشيال ميديا باعتبارك Sofia Reyes.
+
+قدّمي نقداً احترافياً يشمل:
+## 👁️ التسلسل البصري (Visual Hierarchy)
+## 🎨 الألوان والتوافق اللوني
+## 🔤 الخطوط وقابلية القراءة
+## ⚖️ التوازن والمساحة السلبية (White Space)
+## 📢 قوة الـ CTA
+## 📐 التوافق مع المواصفات التقنية
+## ✨ التميز والجذب البصري
+
+**التقييم الإجمالي: [X/10]** مع شرح مختصر
+## 💡 توصياتي العملية للتحسين
+${extra}`;
+      }
+      if (who === 'marco') {
+        const extra = base ? `\n\nملاحظة المستخدم: "${base}"` : '';
+        return `حلّل هذا ${fileInfo} باعتبارك Marco Vitelli، خبير تصميم الشعارات والهوية البصرية.
+
+قدّم تحليلاً معمّقاً يشمل:
+## 🏷️ نوع الشعار وتصنيفه
+(Wordmark / Lettermark / Logomark / Combination / Emblem / Abstract)
+## ⚖️ التوازن البصري والتناسق
+## 🎨 علم نفس الألوان والمعنى
+## 🖋️ اختيار الخطوط والشخصية الطباعية
+## 📱 قابلية التطبيق والـ Scalability
+## 💎 الأصالة والتميز
+## 🔍 مقارنة بمعايير الصناعة
+## 🛠️ نقاط التحسين المقترحة
+
+**"نصيحة Marco الذهبية"** — جملة واحدة مكثّفة
+${extra}`;
+      }
+      if (who === 'clara') {
+        const extra = base ? `\n\nتعليق المستخدم: "${base}"` : '';
+        return `حلّلي هذا ${fileInfo} من منظور خبير صناعة محتوى و Copywriting بخبرة 20 سنة كـ Clara Woods.
+
+قدّمي تقريراً تنقيحياً ومقترحاً للتطوير يشمل:
+## 📜 الهدف والنية (Search Intent & Goal)
+## 🎯 تقييم العناوين والـ Hooks جذباً للانتباه
+## 🗣️ التدفق، الأسلوب ونبرة الصوت (Tone of Voice)
+## 💡 وضوح الرسالة البيعية والفوائد (Benefits)
+## 📢 فاعلية نداء الإجراء (Call to Action)
+## 📝 الملاحظات اللغوية والتحريرية (Copy-editing)
+## 🚀 مقترحات التحسين العملي (صياغة مقترحة للفقرات الضعيفة)
+
+💡 **لمسة Clara الإبداعية** — نصيحة سردية أو زاوية مختلفة للمحتوى.
+${extra}`;
+      }
+      if (who === 'nadia') {
+        const extra = base ? `\n\nتعليق المستخدم: "${base}"` : '';
+        return `حلّلي هذا ${fileInfo} بدقة رياضية حصرية كـ Nadia Sterling — Elite Media Buyer بخبرة 15 سنة.
+
+⛔ تذكير: لا تخترعي أي رقم غير موجود في الملف. حللي فقط الأرقام الظاهرة. إذا كانت بيانات ناقصة، اذكري ما ينقص صراحةً.
+
+قدّمي تقريراً بهذا الهيكل الصارم:
+
+## 📊 ملخص KPIs الأساسية (جدول)
+| المقياس | القيمة | المعادلة المستخدمة | التقييم |
+|---------|--------|--------------------|---------|
+(املئي الجدول من البيانات الفعلية فقط)
+
+## 🔬 تحليل القمع (Funnel Analysis)
+Impression → Click → [ATC/Lead] → Conversion
+(احسبي Drop-off % بين كل مرحلة وحددي أضعف نقطة)
+
+## 💰 تحليل التكلفة والعائد
+- اعرضي المعادلة ثم التعويض ثم النتيجة لكل من: CPA, ROAS, CPC, CPM, CTR, CVR
+
+## 🎯 تقييم الاستهداف والجمهور
+## 📈 قرار التوسيع/الإيقاف
+بناءً على قواعد SCALE/HOLD/KILL:
+- SCALE إذا CPA < Target بـ 20%+
+- KILL إذا Spend > 1.5× Target CPA مع 0 Conversions
+
+## ⚠️ نقاط الهدر في الميزانية
+## 🚀 خطة التحسين (5 خطوات مرقّمة)
+
+💡 **نصيحة Nadia الذهبية** — توصية واحدة ستُحدث الفرق الأكبر.
+## 📚 المصادر والأسس التي استندتُ إليها
+${extra}`;
+      }
+    }
+
+    // ═══════════════════════════════════════════
+    // FILE CATEGORY LABELS
+    // ═══════════════════════════════════════════
+    function fileCategoryLabel(f) {
+      if (f.category === 'image') return 'الصورة المرفقة';
+      if (f.category === 'pdf') return 'ملف PDF المرفق';
+      return 'الملف النصي المرفق';
+    }
+    function fileTypeIcon(f) {
+      if (f.category === 'image') return '🖼️';
+      if (f.category === 'pdf') return '📄';
+      return '📝';
+    }
+
+    // ═══════════════════════════════════════════
+    // DOMAIN TABS
+    // ═══════════════════════════════════════════
+    const VT = { 'استراتيجية البراند': '💡 احضر: اسم البراند، المنتج، الجمهور، المنافسين.', 'التسويق الرقمي': '💡 حدد قنواتك الرقمية وميزانيتك.', 'الإعلانات المدفوعة': '💡 جهّز: الميزانية، المنصة، الهدف.', 'SEO والمحتوى': '💡 أخبرني عن مجالك وترتيبك الحالي في Google.', 'Email Marketing': '💡 حدد حجم قاعدة بياناتك وهدف الحملة.', 'التحليل والبيانات': '💡 أخبرني عن الأدوات المستخدمة: Google Analytics, Meta Pixel...' };
+    const MT = { 'تصميم الشعار': '🖊️ جهّز: اسم المشروع، قطاع النشاط، الجمهور المستهدف، ومثال لشعارات تُعجبك.', 'الهوية البصرية الكاملة': '📁 حضّر: وصف المشروع، القيم الجوهرية، والجمهور المستهدف.', 'Brand Guidelines': '📋 هل لديك شعار وألوان وخطوط محددة مسبقاً؟ أخبرني عنها.', 'Rebranding': '🔄 أخبرني: لماذا تفكر في التغيير؟ وما الذي تريد الحفاظ عليه؟', 'تطبيقات الهوية': '📦 على أي وسائط تحتاج تطبيق الهوية؟ (طباعة، رقمي، بيئي..)' };
+    const CT = { 'المقالات والمدونات': '📝 جهّز: الفكرة العامة، الكلمات المفتاحية للحصول على نصوص متوافقة مع SEO.', 'كتابة الإعلانات': '📢 أخبرني: ما هو المنتج؟ وما هو النداء للإجراء (CTA) الذي تطلبه؟', 'السكربتات للفيديو': '🎬 حدد: المنصة (YouTube/Reels)، المدة التقريبية، والرسالة.', 'الخطة الاستراتيجية': '🗓️ أعطني لمحة عن مجالك وأهدافك لنرسم خطة المحتوى معاً.', 'سرد القصص': '📚 كيف بدأ مشروعك؟ وما الذي يميزه حقاً؟ سنبني قصتك هنا.' };
+    const NT = { 'Meta Ads': '💰 جهّزي: الميزانية، الهدف (Conversions/Traffic/Awareness)، والجمهور المستهدف.', 'Google Ads': '📊 حددي: نوع الحملة (Search/Display/PMax)، الكلمات المفتاحية، الميزانية.', 'TikTok Ads': '🎵 أخبريني: الهدف ونوع المحتوى (In-Feed/TopView/Spark Ads).', 'Snapchat Ads': '📱 جهّزي: الهدف، الفئة العمرية، ونوع الإعلان (Story/Collection/AR Lens).', 'التحليل والتحسين': '📈 شاركيني بيانات حملتك (ROAS, CPA, CTR) وسأعطيك خطة تحسين.' };
+
+    function setVD(el, n) { document.querySelectorAll('.stab.v').forEach(t => t.classList.remove('active')); el.classList.add('active'); vDom = n; if (VT[n]) vApp('bot', VT[n] + '\n\nكيف أساعدك في **' + n + '**؟'); }
+    function setSP(el, n) { document.querySelectorAll('.stab.s').forEach(t => t.classList.remove('active')); el.classList.add('active'); sPlt = n; if (n !== 'عام' && SPECS[n]) { let msg = `## 📐 مواصفات ${n}\n\n`; Object.entries(SPECS[n]).forEach(([k, v]) => { msg += `- **${k}:** ${v}\n`; }); msg += `\nكيف أساعدك في تصميم ${n}؟`; sApp('bot', msg); } }
+    function setMT(el, n) { document.querySelectorAll('.stab.m').forEach(t => t.classList.remove('active')); el.classList.add('active'); mTpc = n; if (MT[n]) mApp('bot', MT[n] + '\n\nكيف أساعدك في **' + n + '**؟'); }
+    function setCT(el, n) { document.querySelectorAll('.stab.c').forEach(t => t.classList.remove('active')); el.classList.add('active'); cTpc = n; if (CT[n]) cApp('bot', CT[n] + '\n\nكيف أساعدك في **' + n + '**؟'); }
+    function setNT(el, n) { document.querySelectorAll('.stab.n').forEach(t => t.classList.remove('active')); el.classList.add('active'); nTpc = n; if (NT[n]) nApp('bot', NT[n] + '\n\nكيف أساعدك في **' + n + '**؟'); }
+
+    // ═══════════════════════════════════════════
+    // SWITCHER
+    // ═══════════════════════════════════════════
+    function switchTo(id, el) {
+      active = id;
+      document.querySelectorAll('.etab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      ['victor', 'sofia', 'marco', 'clara', 'nadia'].forEach(w => {
+        document.getElementById('ep-' + w).classList.toggle('hidden', w !== id);
+      });
+      updateInfoPanel(id);
+    }
+
+    // ═══════════════════════════════════════════
+    // UTILS
+    // ═══════════════════════════════════════════
+    function gt() { const n = new Date(); return n.getHours().toString().padStart(2, '0') + ':' + n.getMinutes().toString().padStart(2, '0'); }
+    function ar(el) { el.style.height = '22px'; el.style.height = Math.min(el.scrollHeight, 110) + 'px'; }
+    function hk(e, w) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); w === 'v' ? vSendMsg() : w === 's' ? sSendMsg() : w === 'm' ? mSendMsg() : w === 'n' ? nSendMsg() : cSendMsg(); } }
+    function esc(t) { return t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+    function fmt(text) {
+      let t = esc(text);
+      t = t.replace(/(\|.+\|\n?)+/g, (m) => {
+        const rows = m.trim().split('\n').filter(r => r.trim());
+        let html = '<table>'; let hd = false;
+        rows.forEach(r => {
+          if (r.match(/^\|[\s\-:|]+\|$/)) return;
+          const cells = r.split('|').filter((_, j, a) => j > 0 && j < a.length - 1);
+          if (!hd) { html += `<tr>${cells.map(c => `<th>${c.trim()}</th>`).join('')}</tr>`; hd = true; }
+          else html += `<tr>${cells.map(c => `<td>${c.trim()}</td>`).join('')}</tr>`;
+        });
+        return html + '</table>';
+      });
+      t = t.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+      t = t.replace(/^## (.+)$/gm, '<h3>$1</h3>');
+      t = t.replace(/^#### (.+)$/gm, '<h4>$1</h4>');
+      t = t.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      t = t.replace(/\*(.+?)\*/g, '<em>$1</em>');
+      t = t.replace(/`(.+?)`/g, '<code>$1</code>');
+      t = t.replace(/^&gt; (.+)$/gm, '<blockquote>$1</blockquote>');
+      t = t.replace(/^---$/gm, '<hr>');
+      t = t.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+      t = t.replace(/^[-•✅❌📌🎯📈💡⚠️] (.+)$/gm, '<li>$1</li>');
+      t = t.replace(/(<li>[\s\S]*?<\/li>)/g, '<ul>$1</ul>');
+      t = t.replace(/<\/ul>\s*<ul>/g, '');
+      t = t.replace(/\n\n+/g, '</p><p>');
+      t = t.replace(/\n/g, '<br>');
+      t = '<p>' + t + '</p>';
+      ['p', 'h3', 'h4', 'ul', 'hr', 'table', 'blockquote'].forEach(tag => {
+        t = t.replace(new RegExp(`<p>(<${tag}[^>]*>)`, 'g'), '$1');
+        t = t.replace(new RegExp(`(</${tag}>)</p>`, 'g'), '$1');
+      });
+      return t.replace(/<p><\/p>/g, '');
+    }
+
+    function xQs(text, col) {
+      const qs = (text.match(/\d+[\.\)]\s+[^?\n]{5,}[?؟]/g) || []).slice(0, 4);
+      if (!qs.length) return '';
+      return '<div class="qr-wrap">' + qs.map(q => {
+        const s = q.replace(/^\d+[\.\)]\s*/, '');
+        const short = s.length > 42 ? s.substring(0, 42) + '…' : s;
+        const fn = col === 'v' ? `vSend('${esc(s)}')`
+          : col === 's' ? `sSend('${esc(s)}')`
+            : col === 'm' ? `mSend('${esc(s)}')`
+              : col === 'n' ? `nSend('${esc(s)}')`
+                : `cSend('${esc(s)}')`;
+        return `<button class="qr ${col}" onclick="${fn}">${short}</button>`;
+      }).join('') + '</div>';
+    }
+
+    // ═══════════════════════════════════════════
+    // MESSAGE RENDERING
+    // ═══════════════════════════════════════════
+    function mkFileChip(f) {
+      if (!f) return '';
+      let thumbHtml = '';
+      if (f.category === 'image' && f.dataUrl) {
+        thumbHtml = `<img src="${f.dataUrl}" class="msg-file-thumb"/>`;
+      } else {
+        const cls = f.category === 'pdf' ? 'pdf' : f.category === 'text' ? 'txt' : 'img';
+        const icon = f.category === 'pdf' ? '📄' : f.category === 'text' ? '📝' : '🖼️';
+        thumbHtml = `<div class="msg-file-icon ${cls}">${icon}</div>`;
+      }
+      return `<div class="msg-file-chip">${thumbHtml}<div class="msg-file-info"><div class="msg-file-name">${esc(f.name)}</div><div class="msg-file-meta">${f.size}</div></div></div>`;
+    }
+
+    function mkMsg(role, content, who, fileObj) {
+      const col = who === 'victor' ? 'v' : who === 'sofia' ? 's' : who === 'marco' ? 'm' : who === 'nadia' ? 'n' : 'c';
+      const icon = who === 'victor' ? '📊' : who === 'sofia' ? '🎨' : who === 'marco' ? '✏️' : who === 'nadia' ? '💰' : '✍️';
+      const analyzeLabels = { victor: 'تحليل Victor التسويقي', sofia: 'تقييم Sofia البصري', marco: 'تحليل Marco للهوية', clara: 'تنقيح Clara للمحتوى', nadia: 'تحليل Nadia للحملة' };
+      const botLbl = role === 'bot' ? `<div class="bot-lbl ${col}">✦ ${analyzeLabels[who] || who + ' يجيب'}</div>` : '';
+      const qr = role === 'bot' ? xQs(content, col) : '';
+      const fileChip = role === 'user' && fileObj ? mkFileChip(fileObj) : '';
+      const analysisTag = role === 'bot' && content.includes('##') ? `<div class="analysis-badge ${col}">🔍 تحليل معمّق</div>` : '';
+      return `
+    <div class="msg-av ${role === 'user' ? 'u' : who}">${role === 'user' ? '👤' : icon}</div>
+    <div>
+      <div class="msg-bub">${analysisTag || botLbl}${fileChip}${fmt(content)}${qr}</div>
+      <div class="msg-time">${gt()}</div>
+    </div>`;
+    }
+
+    function addMsg(chatId, wcId, role, content, who, fileObj) {
+      const wc = document.getElementById(wcId);
+      if (wc) wc.style.display = 'none';
+      const wrap = document.getElementById(chatId);
+      const row = document.createElement('div');
+      row.className = 'msg-row ' + (role === 'user' ? 'user' : 'bot');
+      row.innerHTML = mkMsg(role, content, who, fileObj);
+      wrap.appendChild(row);
+      wrap.scrollTop = wrap.scrollHeight;
+      const badgeId = who === 'victor' ? 'vBadge' : who === 'sofia' ? 'sBadge' : who === 'marco' ? 'mBadge' : who === 'nadia' ? 'nBadge' : 'cBadge';
+      const badge = document.getElementById(badgeId);
+      if (badge) { badge.textContent = parseInt(badge.textContent || '0') + 1; badge.classList.add('show'); }
+    }
+
+    function vApp(r, c, f) { addMsg('chat-victor', 'wc-victor', r, c, 'victor', f); }
+    function sApp(r, c, f) { addMsg('chat-sofia', 'wc-sofia', r, c, 'sofia', f); }
+    function mApp(r, c, f) { addMsg('chat-marco', 'wc-marco', r, c, 'marco', f); }
+    function cApp(r, c, f) { addMsg('chat-clara', 'wc-clara', r, c, 'clara', f); }
+    function nApp(r, c, f) { addMsg('chat-nadia', 'wc-nadia', r, c, 'nadia', f); }
+
+    // ═══════════════════════════════════════════
+    // TYPING INDICATORS
+    // ═══════════════════════════════════════════
+    function showT(chatId, who, isAnalysis) {
+      const wrap = document.getElementById(chatId);
+      const d = document.createElement('div');
+      d.id = 'ty-' + who;
+      d.className = 'typing-row' + (isAnalysis ? ' analyzing' : '');
+      const col = who === 'victor' ? 'var(--vc)' : who === 'sofia' ? 'var(--sc)' : who === 'marco' ? 'var(--mc)' : who === 'nadia' ? 'var(--nc)' : 'var(--cc)';
+      const c2 = who === 'victor' ? 'var(--vg)' : who === 'sofia' ? 'var(--sp)' : who === 'marco' ? 'var(--mg)' : who === 'nadia' ? 'var(--ng)' : 'var(--cg)';
+      const icon = who === 'victor' ? '📊' : who === 'sofia' ? '🎨' : who === 'marco' ? '✏️' : who === 'nadia' ? '💰' : '✍️';
+      const scanLabel = isAnalysis ? '<span class="typing-label">جارٍ التحليل…</span>' : '';
+      d.innerHTML = `<div class="msg-av ${who}">${icon}</div><div class="typing-bub"><div class="tdot" style="background:${col}"></div><div class="tdot" style="background:${c2};animation-delay:.2s"></div><div class="tdot" style="background:${col};animation-delay:.4s"></div>${scanLabel}</div>`;
+      wrap.appendChild(d); wrap.scrollTop = wrap.scrollHeight;
+    }
+    function hideT(who) { const e = document.getElementById('ty-' + who); if (e) e.remove(); }
+
+    // ═══════════════════════════════════════════
+    // API CALLS
+    // ═══════════════════════════════════════════
+    async function callAPI(sys, hist, chatId, wcId, who, btnId, loadVar, isAnalysis) {
+      if (!API_KEY) { openSettings(); return; }
+      showT(chatId, who, isAnalysis);
+      document.getElementById(btnId).disabled = true;
+      window[loadVar] = true;
+      try {
+        const msgs = [{ role: 'system', content: sys }, ...hist];
+        const res = await fetch(URL_API, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + API_KEY },
+          body: JSON.stringify({ model: MODEL, messages: msgs, temperature: 0.4, max_tokens: 4000 })
+        });
+        const data = await res.json();
+        hideT(who);
+        if (!res.ok) { addMsg(chatId, wcId, 'bot', '⚠️ **خطأ:** ' + (data.error?.message || 'خطأ'), who, null); return; }
+        const reply = data.choices?.[0]?.message?.content || 'لم أتمكن من إنشاء رد.';
+        hist.push({ role: 'assistant', content: reply });
+        addMsg(chatId, wcId, 'bot', reply, who, null);
+        if (hist.length > 44) hist.splice(0, hist.length - 44);
+      } catch (e) {
+        hideT(who);
+        addMsg(chatId, wcId, 'bot', '⚠️ **خطأ في الشبكة:** ' + e.message, who, null);
+      } finally {
+        document.getElementById(btnId).disabled = false;
+        window[loadVar] = false;
+      }
+    }
+
+    async function callVisionAPI(sys, imageBase64, mimeType, prompt, chatId, wcId, who, btnId, loadVar) {
+      if (!API_KEY) { openSettings(); return; }
+      showT(chatId, who, true);
+      document.getElementById(btnId).disabled = true;
+      window[loadVar] = true;
+      try {
+        const msgs = [
+          { role: 'system', content: sys },
+          {
+            role: 'user', content: [
+              { type: 'image_url', image_url: { url: `data:${mimeType};base64,${imageBase64}` } },
+              { type: 'text', text: prompt }
+            ]
+          }
+        ];
+        const res = await fetch(URL_API, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + API_KEY },
+          body: JSON.stringify({ model: VIS_MODEL, messages: msgs, temperature: 0.4, max_tokens: 4000 })
+        });
+        const data = await res.json();
+        hideT(who);
+        if (!res.ok) { addMsg(chatId, wcId, 'bot', '⚠️ **خطأ:** ' + (data.error?.message || 'خطأ'), who, null); return; }
+        const reply = data.choices?.[0]?.message?.content || 'لم أتمكن من إنشاء رد.';
+        // add to text history
+        const histMap = { victor: vH, sofia: sH, marco: mH, clara: cH, nadia: nH };
+        const hist = histMap[who];
+        hist.push({ role: 'assistant', content: reply });
+        addMsg(chatId, wcId, 'bot', reply, who, null);
+        if (hist.length > 44) hist.splice(0, hist.length - 44);
+      } catch (e) {
+        hideT(who);
+        addMsg(chatId, wcId, 'bot', '⚠️ **خطأ في التحليل البصري:** ' + e.message, who, null);
+      } finally {
+        document.getElementById(btnId).disabled = false;
+        window[loadVar] = false;
+      }
+    }
+
+    // ═══════════════════════════════════════════
+    // SEND FUNCTIONS
+    // ═══════════════════════════════════════════
+    function doSend(inpId, hist, chatId, wcId, who, btnId, loadVar, promptFn) {
+      if (window[loadVar]) return;
+      const w = inpId[0]; // 'v','s','m'
+      const inp = document.getElementById(inpId);
+      const text = inp.value.trim();
+      const file = attached[w];
+
+      // must have text OR file
+      if (!text && !file) return;
+
+      inp.value = ''; inp.style.height = '22px';
+
+      const displayText = text || (file ? '📎 ' + file.name : '');
+
+      // show user message with file chip
+      addMsg(chatId, wcId, 'user', text || '', who, file);
+
+      if (file) {
+        // clear file attachment
+        clearFile(w);
+
+        if (file.category === 'image') {
+          // Vision API
+          const prompt = getAnalysisPrompt(who, text, fileCategoryLabel(file));
+          hist.push({ role: 'user', content: prompt + '\n[صورة مرفقة: ' + file.name + ']' });
+          callVisionAPI(promptFn(), file.base64, file.mimeType, prompt, chatId, wcId, who, btnId, loadVar);
+        } else {
+          // Text/PDF — include content in message
+          const fileContent = file.textContent || '';
+          const analysisPrompt = getAnalysisPrompt(who, text, fileCategoryLabel(file));
+          const fullMsg = analysisPrompt + '\n\n---\n**محتوى الملف:**\n```\n' + fileContent.substring(0, 8000) + '\n```';
+          hist.push({ role: 'user', content: fullMsg });
+          callAPI(promptFn(), hist, chatId, wcId, who, btnId, loadVar, true);
+        }
+      } else {
+        hist.push({ role: 'user', content: text });
+        callAPI(promptFn(), hist, chatId, wcId, who, btnId, loadVar, false);
+      }
+    }
+
+    function vSend(t) { document.getElementById('vInp').value = t; vSendMsg(); }
+    function vSendMsg() { doSend('vInp', vH, 'chat-victor', 'wc-victor', 'victor', 'vBtn', 'vL', vPmt); }
+
+    function sSend(t) { document.getElementById('sInp').value = t; sSendMsg(); }
+    function sSendMsg() { doSend('sInp', sH, 'chat-sofia', 'wc-sofia', 'sofia', 'sBtn', 'sL', sPmt); }
+
+    function mSend(t) { document.getElementById('mInp').value = t; mSendMsg(); }
+    function mSendMsg() { doSend('mInp', mH, 'chat-marco', 'wc-marco', 'marco', 'mBtn', 'mL', mPmt); }
+
+    function cSend(t) { document.getElementById('cInp').value = t; cSendMsg(); }
+    function cSendMsg() { doSend('cInp', cH, 'chat-clara', 'wc-clara', 'clara', 'cBtn', 'cL', cPmt); }
+
+    function nSend(t) { document.getElementById('nInp').value = t; nSendMsg(); }
+    function nSendMsg() { doSend('nInp', nH, 'chat-nadia', 'wc-nadia', 'nadia', 'nBtn', 'nL', nPmt); }
+
+    // ═══════════════════════════════════════════
+    // CLEAR
+    // ═══════════════════════════════════════════
+    const WC_HTML = {
+      victor: `<span class="wc-emoji">📊</span><div class="wc-name v">Victor Kane</div><div class="wc-desc">استراتيجي تسويق دولي بخبرة <strong>40+ سنة</strong>. يحلل ملفاتك التسويقية ويقدم استراتيجيات مخصصة.</div><div class="wc-upload-hint" onclick="triggerFile('v')">📎 ارفع ملف للتحليل التسويقي</div><div class="sg"><div class="sg-card v" onclick="vSend('استراتيجية تسويقية')"><span class="sg-icon">🎯</span><div><div class="sg-text">استراتيجية</div></div></div><div class="sg-card v" onclick="vSend('بناء البراند')"><span class="sg-icon">🏆</span><div><div class="sg-text">البراند</div></div></div><div class="sg-card v" onclick="vSend('زيادة المبيعات')"><span class="sg-icon">📈</span><div><div class="sg-text">المبيعات</div></div></div></div>`,
+      sofia: `<span class="wc-emoji">🎨</span><div class="wc-name s">Sofia Reyes</div><div class="wc-desc">مصممة بوسترات السوشيال ميديا بخبرة <strong>40 سنة</strong>. ارفعي تصميمك لتقييم احترافي.</div><div class="wc-upload-hint" onclick="triggerFile('s')">📎 ارفع تصميمك للتقييم البصري</div><div class="sug-row"><button class="sr" onclick="sSend('بوستر Instagram')">📸 Instagram</button><button class="sr" onclick="sSend('مقاسات')">📐 مقاسات</button><button class="sr" onclick="sSend('الألوان')">🎨 ألوان</button></div>`,
+      marco: `<span class="wc-emoji">✏️</span><div class="wc-name m">Marco Vitelli</div><div class="wc-desc">مصمم شعارات بخبرة <strong>40 سنة</strong>. ارفع شعارك وسيحلله بعين الخبير.</div><div class="wc-upload-hint" onclick="triggerFile('m')">📎 ارفع الشعار أو الهوية البصرية</div><div class="sg"><div class="sg-card m" onclick="mSend('تصميم شعار')"><span class="sg-icon">✏️</span><div><div class="sg-text">الشعار</div></div></div><div class="sg-card m" onclick="mSend('هوية بصرية')"><span class="sg-icon">🎨</span><div><div class="sg-text">الهوية</div></div></div><div class="sg-card m" onclick="mSend('Guidelines')"><span class="sg-icon">📋</span><div><div class="sg-text">Guidelines</div></div></div></div>`,
+      clara: `<span class="wc-emoji">✍️</span><div class="wc-name c">Clara Woods</div><div class="wc-desc">خبيرة كتابة وتسويق المحتوى بخبرة <strong>20 سنة</strong>. ارفع نصوصك أو مقالاتك وسأقوم بتنقيحها.</div><div class="wc-upload-hint" onclick="triggerFile('c')">📎 ارفع نصك للمراجعة والتقييم</div><div class="sg"><div class="sg-card c" onclick="cSend('خطة محتوى')"><span class="sg-icon">🗓️</span><div><div class="sg-text">خطة محتوى</div></div></div><div class="sg-card c" onclick="cSend('كتابة الإعلانات')"><span class="sg-icon">📢</span><div><div class="sg-text">إعلانات</div></div></div><div class="sg-card c" onclick="cSend('مقال SEO')"><span class="sg-icon">📝</span><div><div class="sg-text">مقال SEO</div></div></div></div>`,
+      nadia: `<span class="wc-emoji">💰</span><div class="wc-name n">Nadia Sterling</div><div class="wc-desc">خبيرة ميديا باينغ بخبرة <strong>15+ سنة</strong>. ارفع تقرير حملتك وسأحلله بعين الخبير.</div><div class="wc-upload-hint" onclick="triggerFile('n')">📎 ارفع تقرير حملتك للتحليل</div><div class="sg"><div class="sg-card n" onclick="nSend('أول حملة Meta')"><span class="sg-icon">💰</span><div><div class="sg-text">Meta Ads</div></div></div><div class="sg-card n" onclick="nSend('تحسين ROAS')"><span class="sg-icon">📈</span><div><div class="sg-text">ROAS</div></div></div><div class="sg-card n" onclick="nSend('Retargeting')"><span class="sg-icon">🔄</span><div><div class="sg-text">Retargeting</div></div></div></div>`
+    };
+
+    function clearCurrent() {
+      if (!confirm('بدء محادثة جديدة مع ' + (active === 'victor' ? 'Victor' : active === 'sofia' ? 'Sofia' : active === 'marco' ? 'Marco' : active === 'nadia' ? 'Nadia' : 'Clara') + '؟')) return;
+      const map = {
+        victor: { h: 'vH', c: 'chat-victor', w: 'wc-victor', badge: 'vBadge' },
+        sofia: { h: 'sH', c: 'chat-sofia', w: 'wc-sofia', badge: 'sBadge' },
+        marco: { h: 'mH', c: 'chat-marco', w: 'wc-marco', badge: 'mBadge' },
+        clara: { h: 'cH', c: 'chat-clara', w: 'wc-clara', badge: 'cBadge' },
+        nadia: { h: 'nH', c: 'chat-nadia', w: 'wc-nadia', badge: 'nBadge' }
+      };
+      const cfg = map[active];
+      window[cfg.h] = [];
+      clearFile(active[0]);
+      const ca = document.getElementById(cfg.c);
+      ca.innerHTML = '';
+      const wc = document.createElement('div');
+      wc.id = cfg.w; wc.className = 'wc';
+      wc.innerHTML = WC_HTML[active];
+      ca.appendChild(wc);
+      const badge = document.getElementById(cfg.badge);
+      if (badge) { badge.textContent = '0'; badge.classList.remove('show'); }
+    }
+  </script>
+</body>
+
+</html>
